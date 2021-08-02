@@ -5,7 +5,11 @@ import {isLoggedIn, isAuthenticated} from '../controllers/authController.js';
 
 const router = express.Router();
 
-router.post('/', isLoggedIn, register);
+router.get('/', () => {
+  console.log('fuck you')
+})
+
+// router.post('/', isLoggedIn, register);
 
 router.post('/')
 

@@ -12,7 +12,6 @@ import AppError from '../utils/appError.js'
 
 export const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
-    console.log('fucker is not authenticated')
     console.log('figure out how you are going to be redirecting')
     // return res.redirect
   }
