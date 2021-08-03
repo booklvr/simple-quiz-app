@@ -4,7 +4,7 @@ import validator from 'validator';
 import crypto from 'crypto'
 import Classroom from './ClassroomModel.js'
 
-const UserSchema = new mongoose.Schema(
+const TeacherSchema = new mongoose.Schema(
   {
     googleId: {
       type: String,
@@ -19,6 +19,10 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       validate: [validator.isEmail, 'Please provide an email'],
+    },
+    newUser: {
+      type: Boolean,
+      default: false,
     },
     salt: {
       type: String,
@@ -45,9 +49,9 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+TeacherSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
-UserSchema.methods.createPasswordResetToken = function () {
+TeacherSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
   this.passwordResetToken = crypto
@@ -60,13 +64,13 @@ UserSchema.methods.createPasswordResetToken = function () {
   return resetToken;
 };
 
-UserSchema.virtual('classrooms', {
+TeacherSchema.virtual('classrooms', {
   ref: 'Classroom',
   localField: '_id',
   foreignField: 'owner',
 });
 
-UserSchema.post('findOneAndDelete', async function (user) {
+TeacherSchema.post('findOneAndDelete', async function (user) {
   console.log('user', user);
 
   if (user) {
@@ -85,8 +89,8 @@ UserSchema.post('findOneAndDelete', async function (user) {
   }
 });
 
-const User = mongoose.model('User', UserSchema)
-export default User;
+const Teacher = mongoose.model('Teacher', TeacherSchema)
+export default Teacher;
 
 // export default mongoose.model('User', UserSchema)
 

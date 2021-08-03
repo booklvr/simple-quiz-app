@@ -3,11 +3,12 @@ import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import {
-  // reducers
-} from './reducers/userReducers'
+  newGoogleUserReducer
+} from './reducers/newGoogleUserReducers'
 
 const reducer = combineReducers({
   //reducers
+  newGoogleUser: newGoogleUserReducer
   // userLogin: userLoginReducer,
 })
 

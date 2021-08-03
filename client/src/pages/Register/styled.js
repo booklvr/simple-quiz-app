@@ -2,10 +2,11 @@ import styled from 'styled-components/macro';
 import {Link} from 'react-router-dom'
 
 export const RegisterPageContainer = styled.div`
+  display: flex;
   height: calc(100vh - var(--navbar-height));
   background-color: var(--purple);
   width: 100vw;
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   align-items: center;
 `;
@@ -15,35 +16,35 @@ export const RegisterFormContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background: #fff;
+  padding: 20px 40px;
 `;
 
 export const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  
 `;
 
 export const RegisterH1 = styled.h1`
   font-size: 30px;
+  color: pink;  
 `;
 
 export const RegisterH2 = styled.h2`
-  
+  font-size: 20px;
+ 
 `;
 
 export const RegisterLinksContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
   background-color: pink;
   width: 100%;
 `;
 
-export const RegisterLink = styled(Link)`
+export const RegisterLink = styled.a`
+  
   display: flex;
   flex-direction: row;
-  width: 100%;
   height: 30px;
-  margin-left: 50px;
   text-decoration: none;
   background: #fff;
 `;
@@ -65,6 +66,12 @@ export const RegisterLinkText = styled.div`
   align-items: center;
   justify-content: flex-start;
   padding-left: 10px;
+`;
+
+export const OrOption = styled.div`
+  font-size: 15px;
+  margin: 10px 0;
+  text-align: center;
 `;
 
 export const RegisterForm = styled.form`

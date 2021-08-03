@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import moment from 'moment'
 
 // connect to the database
-import User from '../models/UserModel.js';
+import Teacher from '../models/TeacherModel.js';
 import Clasroom from '../models/ClassroomModel.js'
 import Token from '../models/VerificationModel.js'
 import catchAsync from '../utils/catchAsync.js';

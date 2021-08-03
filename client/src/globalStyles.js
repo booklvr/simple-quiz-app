@@ -16,14 +16,13 @@ export const GlobalStyle = createGlobalStyle`
     --navbar-height: 80px;
 
   * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     color: black;
   }
 
   body {
     margin: 0;
+    padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;

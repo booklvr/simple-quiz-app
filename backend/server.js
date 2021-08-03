@@ -5,8 +5,11 @@ import cors from 'cors'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import passport from 'passport'
+import session from 'express-session'
 import path from 'path';
 import connectDB from './config/db.js'
+import mongoose from 'mongoose'
+import MongoStore from 'connect-mongo'
 
 // import routers
 import userRouter from './routes/userRouter.js'
@@ -18,6 +21,7 @@ const __dirname = path.resolve()
 dotenv.config({ path: '../.env' })
 
 connectDB()
+
 
 
 passportConfig(passport);
@@ -51,11 +55,27 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running...')
   })
   app.get('/test', (req, res) => {
-    res.send('what the fuck')
-    console.log('what the fuck?')
+    res.status(200).json({message: 'are you working now'})
+    
   })
 }
 
+
+
+// sessions
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    // proxy: true,
+    store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
+  })
+);
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 app.use('/api/v1/auth', authRouter);

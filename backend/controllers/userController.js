@@ -1,5 +1,5 @@
 import validator from 'validator'
-import User from '../models/UserModel.js'
+import Teacher from '../models/TeacherModel.js'
 import Token from '../models/VerificationModel.js'
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
@@ -68,7 +68,7 @@ export const getUserId = (req, res, next) => {
   next();
 };
 
-export const getAllUsers = getAllFactory(User);
-export const getUser = getOneFactory(User);
-export const updateUser = updateOneFactory(User);
-export const deleteUser = deleteOneFactory(User);
+export const getAllUsers = getAllFactory(Teacher);
+export const getUser = getOneFactory(Teacher);
+export const updateUser = updateOneFactory(Teacher);
+export const deleteUser = deleteOneFactory(Teacher);
