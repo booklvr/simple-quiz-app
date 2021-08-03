@@ -1,10 +1,13 @@
-import React from 'react'
-import {} from './styled'
+import React, {useEffect, useState} from 'react'
+import { LoginPageContainer } from './styled'
 
-const Login = () => {
+const Login = ({match}) => {
+
+  
   return (
     <LoginPageContainer>
-      Login
+      
+      
     </LoginPageContainer>
   )
 }

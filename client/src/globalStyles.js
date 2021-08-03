@@ -2,8 +2,18 @@ import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
   :root {
-   
-  }
+    /* Colors */
+    --primary: #eff7f9;
+    --black:#000000;
+    --purple:#603F83;
+    --grey:#C7D3D4;
+    --white:#fff;
+    --nav:#35353f;
+    --nav2:#3f3d56;
+    --google:#4285F3;
+    
+    /* constants */
+    --navbar-height: 80px;
 
   * {
     margin: 0;

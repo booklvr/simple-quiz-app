@@ -1,0 +1,36 @@
+import React, {useState, useEffect} from 'react'
+import { HeaderContainer, RegisterPageContainer, RegisterH1, RegisterH2, RegisterFormContainer, RegisterLink, RegisterLinksContainer, RegisterLinkIcon, RegisterLinkText, GoogleRegisterLink } from './styled'
+import googleIcon from '../../assets/icons/google-icon-light.svg'
+
+const Register = ({match}) => {
+
+  const [registerType, setRegisterType] = useState()
+
+ 
+  useEffect(() => {
+    setRegisterType(match.params.type)
+  },[match.params.type])
+
+
+  return (
+    <RegisterPageContainer>
+      <RegisterFormContainer>
+        <HeaderContainer>
+          <RegisterH1>Welcome to the English Quiz site</RegisterH1>
+          <RegisterH2>Sign in with google or enter your email to start.</RegisterH2>
+        </HeaderContainer>
+        <RegisterLinksContainer>
+          <GoogleRegisterLink to='/api/v1/auth/google'>
+            <RegisterLinkIcon src={googleIcon}/>
+            <RegisterLinkText>Sign In With Google</RegisterLinkText>
+          </GoogleRegisterLink>
+        </RegisterLinksContainer>
+        
+
+      </RegisterFormContainer>
+      
+    </RegisterPageContainer>
+  )
+}
+
+export default Register
