@@ -1,12 +1,12 @@
-import {createServer} from 'http';
-import { Server } from 'socket.io';
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import passport from 'passport'
 import session from 'express-session'
-import path from 'path';
+import path from 'path'
 import connectDB from './config/db.js'
 import mongoose from 'mongoose'
 import MongoStore from 'connect-mongo'
@@ -14,7 +14,7 @@ import MongoStore from 'connect-mongo'
 // import routers
 import userRouter from './routes/userRouter.js'
 import authRouter from './routes/authRouter.js'
-import passportConfig from './config/passport.js';
+import passportConfig from './config/passport.js'
 
 const __dirname = path.resolve()
 
@@ -22,15 +22,18 @@ dotenv.config({ path: '../.env' })
 
 connectDB()
 
+passportConfig(passport)
 
-
-passportConfig(passport);
-
-const PORT =  process.env.PORT || 8000
+const PORT = process.env.PORT || 8000
 const app = express()
 
-
-app.use(cors())
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // allow to server to accept request from different origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // allow session cookie from browser to pass through
+  })
+)
 app.use(express.json())
 
 // ROUTES
@@ -55,12 +58,9 @@ if (process.env.NODE_ENV === 'production') {
     res.send('API is running...')
   })
   app.get('/test', (req, res) => {
-    res.status(200).json({message: 'are you working now'})
-    
+    res.status(200).json({ message: 'are you working now' })
   })
 }
-
-
 
 // sessions
 app.use(
@@ -69,17 +69,16 @@ app.use(
     resave: true,
     saveUninitialized: true,
     // proxy: true,
-    store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   })
-);
+)
 
 // Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
 
-
-app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/users', userRouter)
 
 const httpServer = createServer()
 const io = new Server(httpServer, {
@@ -88,21 +87,14 @@ const io = new Server(httpServer, {
     methods: ['GET', 'POST'],
     credentials: true,
   },
-});
-
-
-
-app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold)
 })
 
-
-
-
-
+app.listen(PORT, () => {
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  )
+})
 
 io.on('connection', (socket) => {
   console.log(`New socket connected: ${socket.id}`)
 })
-
-

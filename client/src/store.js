@@ -2,13 +2,11 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import {
-  newGoogleUserReducer
-} from './reducers/newGoogleUserReducers'
+import { newGoogleUserReducer } from './reducers/newGoogleUserReducers'
 
 const reducer = combineReducers({
   //reducers
-  newGoogleUser: newGoogleUserReducer
+  newGoogleUser: newGoogleUserReducer,
   // userLogin: userLoginReducer,
 })
 
@@ -34,4 +32,4 @@ const store = createStore(
   composeEnhancers(applyMiddleware(...middleware))
 )
 
-export default store;
+export default store

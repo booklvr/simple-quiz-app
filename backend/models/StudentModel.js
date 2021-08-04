@@ -3,18 +3,17 @@ import mongoose from 'mongoose'
 
 const studentSchema = new mongoose.Schema(
   {
-    classroom: {
-      type: mongoose.Schema.ObjectId, // from user schema logged in user
-      required: [true, 'Student must belong to a class!'],
-      ref: 'Classroom', // connect to userModel
-    },
     name: {
       type: String,
-      required: [true, 'Student must have a name'],
+      // required: [true, 'Student must have a name'],
+    },
+    newUser: {
+      type: Boolean,
+      default: true,
     },
     gender: {
       type: String,
-      required: [true, 'must list a student gender'], // remove later?
+      // required: [true, 'must list a student gender'], // remove later?
     },
     gamePoints: {
       type: Number,
@@ -24,9 +23,13 @@ const studentSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    accountType: {
+      type: String,
+      default: 'student',
+    },
   },
   { timestamps: true }
-);
+)
 
 //CALCULATE AVERAGE GAME SCORE
 // reviewSchema.statics.calcAverageGameScore = async function (classroomId) {
@@ -35,6 +38,4 @@ const studentSchema = new mongoose.Schema(
 
 //CALCULATE AVERAGE PARTICIPATION SCORE
 
-export default mongoose.model('Student', studentSchema);
-
-
+export default mongoose.model('Student', studentSchema)

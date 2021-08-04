@@ -1,18 +1,23 @@
-import express from 'express';
-import {register, updateUser, deleteUser, getUserId} from '../controllers/userController.js'
+import express from 'express'
+import passport from 'passport'
+import {
+  register,
+  updateUser,
+  deleteUser,
+  getUserId,
+  registerFromGoogle,
+} from '../controllers/userController.js'
 // import {register, getUserId, deleteUser} from '../controllers/userController'
-import {isLoggedIn, isAuthenticated} from '../controllers/authController.js';
+import { isLoggedIn, isAuthenticated } from '../controllers/authController.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/', () => {
-  console.log('fuck you')
-})
+router.get('/', () => {})
 
 // router.post('/', isLoggedIn, register);
 
-router.post('/')
+router.route('/google').post(registerFromGoogle)
 
-router.use(isAuthenticated, getUserId);
+router.use(isAuthenticated, getUserId)
 
-export default router;
+export default router

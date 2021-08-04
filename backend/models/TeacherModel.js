@@ -1,11 +1,15 @@
 import mongoose from 'mongoose'
 import passportLocalMongoose from 'passport-local-mongoose'
-import validator from 'validator';
+import validator from 'validator'
 import crypto from 'crypto'
 import Classroom from './ClassroomModel.js'
 
 const TeacherSchema = new mongoose.Schema(
   {
+    accountType: {
+      type: String,
+      default: 'teacher',
+    },
     googleId: {
       type: String,
       select: false,
@@ -22,7 +26,7 @@ const TeacherSchema = new mongoose.Schema(
     },
     newUser: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     salt: {
       type: String,
@@ -47,50 +51,49 @@ const TeacherSchema = new mongoose.Schema(
     toJson: { virtuals: true },
     toObject: { virtuals: true },
   }
-);
+)
 
-TeacherSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+TeacherSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 
 TeacherSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(32).toString('hex');
+  const resetToken = crypto.randomBytes(32).toString('hex')
 
   this.passwordResetToken = crypto
     .createHash('sha256')
     .update(resetToken)
-    .digest('hex');
+    .digest('hex')
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
 
-  return resetToken;
-};
+  return resetToken
+}
 
 TeacherSchema.virtual('classrooms', {
   ref: 'Classroom',
   localField: '_id',
   foreignField: 'owner',
-});
+})
 
 TeacherSchema.post('findOneAndDelete', async function (user) {
-  console.log('user', user);
+  console.log('user', user)
 
   if (user) {
-    const classrooms = await Classroom.find({ owner: user._id });
+    const classrooms = await Classroom.find({ owner: user._id })
 
-    console.log('classrooms', classrooms);
+    console.log('classrooms', classrooms)
 
     await Promise.all(
       classrooms.map(async (classroom) => {
         const deletedClassroom = await Classroom.findByIdAndDelete(
           classroom._id
-        );
-        console.log('deletedClassroom', deletedClassroom);
+        )
+        console.log('deletedClassroom', deletedClassroom)
       })
-    );
+    )
   }
-});
+})
 
 const Teacher = mongoose.model('Teacher', TeacherSchema)
-export default Teacher;
+export default Teacher
 
 // export default mongoose.model('User', UserSchema)
-
