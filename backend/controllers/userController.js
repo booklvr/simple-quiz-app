@@ -27,19 +27,30 @@ export const registerFromGoogle = catchAsync(async (req, res, next) => {
       displayName: req.user.displayName,
       email: req.user.email,
     }
+    // delete the temporary user
+    const deletedTempUser = await TempUser.findByIdAndDelete(req.user._id)
+
+    if (!deletedTempUser)
+      return next(new AppError('No document found with that ID', 404))
 
     console.log('tempUser', newUser)
 
     if (type === 'teacher') {
       const newTeacher = Teacher.create(newUser)
+      if (!newTeacher) return next(new AppError('Teacher could not be created'))
     } else {
       const newStudent = Student.create(newUser)
+      if (!newStudent) return next(new AppError('Student could not be created'))
     }
+    res.status(201).json({
+      status: 'success',
+      data: null,
+    })
 
     // DELETE THE OLD USER
   } else {
     res.status(404)
-    throw new Error('User not found')
+    throw new Error('Error Creating new User')
   }
 })
 
