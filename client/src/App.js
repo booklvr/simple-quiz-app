@@ -5,7 +5,8 @@ import GoogleChooseAccountType from './pages/GoogleChooseAccountType'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import TeacherHome from './pages/TeacherHome/styled'
+import StudentHome from './pages/StudentHome'
+import TeacherHome from './pages/TeacherHome'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           component={GoogleChooseAccountType}
         />
         <Route exact path='/teacher' component={TeacherHome} />
+        <Route exact path='/student' component={StudentHome} />
       </Switch>
     </Router>
   )

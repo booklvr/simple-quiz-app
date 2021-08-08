@@ -39,10 +39,6 @@ const TeacherSchema = new mongoose.Schema(
     passwordResetToken: String,
     passwordChangedAt: Date,
     passwordResetExpires: Date,
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     timestamps: true,

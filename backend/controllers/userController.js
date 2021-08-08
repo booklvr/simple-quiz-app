@@ -11,15 +11,16 @@ import {
   deleteOneFactory,
   updateOneFactory,
 } from './handlerFactory.js'
+import passport from 'passport'
 
 export const registerFromGoogle = catchAsync(async (req, res, next) => {
   const { id, type } = req.body
 
-  const googleId = await TempUser.findById(id).select('googleId')
+  const { googleId } = await TempUser.findById(id).select('googleId')
 
   if (googleId) {
     // IF NOT GOOGLE ID NEW ERROR
-
+    console.log('creating the new user')
     // create the new user
     const newUser = {
       googleId,
@@ -27,25 +28,94 @@ export const registerFromGoogle = catchAsync(async (req, res, next) => {
       displayName: req.user.displayName,
       email: req.user.email,
     }
+
+    const tempUserId = req.user._id
+    console.log('newUser', newUser)
+
+    // logout the tempuser
+    console.log('logout the temp user')
+    req.logout()
+    delete req.session
+
     // delete the temporary user
-    const deletedTempUser = await TempUser.findByIdAndDelete(req.user._id)
+    console.log('deleting the temp user')
+    const deletedTempUser = await TempUser.findByIdAndDelete(tempUserId)
+    console.log('deletedTempUser', deletedTempUser)
 
     if (!deletedTempUser)
       return next(new AppError('No document found with that ID', 404))
 
-    console.log('tempUser', newUser)
+
+    // req.session.destroy()
+
+
 
     if (type === 'teacher') {
-      const newTeacher = Teacher.create(newUser)
+
+      console.log('creating new teacher instance')
+      const newTeacher = await Teacher.create(newUser)
+
+
       if (!newTeacher) return next(new AppError('Teacher could not be created'))
+
+      req.login(newTeacher, ((err) => {
+        if (err) { return next(err) }
+        res.status(201).json({
+          status: 'success',
+          data: newTeacher,
+        })
+      }))
+
+      console.log('newTeacher', newTeacher)
+
+      // passport.authenticate('custom', { failureRedirect: '/login' })
+
+
+      // if (req.isAuthenticated()) {
+      //   console.log('this fucker is still authenticated')
+      //   console.log(req.user.id, 'req.user.id')
+      // } else {
+      //   console.log('we lost authentication.')
+      // }
+      // passport.authenticate('google', {
+      //   failureRedirect: 'http://localhost/test',
+      //   // successRedirect: 'http://localhost:3000',
+      // },
+      //   () => {
+      //     console.log('trying to authenticate user in the register google route')
+
+      //     res.status(201).json({
+      //       status: 'success',
+      //       message: 'User registered successfully',
+      //       data: {
+      //         user: req.user,
+      //       }
+      //     })
+      //   }
+      // )
+
     } else {
-      const newStudent = Student.create(newUser)
+      const newStudent = await Student.create(newUser)
+
       if (!newStudent) return next(new AppError('Student could not be created'))
+
+      req.login(newStudent, ((err) => {
+        if (err) { return next(err) }
+        res.status(201).json({
+          status: 'success',
+          data: newStudent,
+        })
+      }))
     }
-    res.status(201).json({
-      status: 'success',
-      data: null,
-    })
+
+
+    // passport.authenticate('custom', { failureRedirect: 'http://localhost:3000/test' }), ((req, res) => {
+    //   res.status(201).json({
+    //     status: 'success',
+    //     data: req.user,
+    //   })
+    // })
+
 
     // DELETE THE OLD USER
   } else {

@@ -29,15 +29,17 @@ router.get(
     failureRedirect: 'http://localhost/test',
     // successRedirect: 'http://localhost:3000',
   }),
-  (req, res, next) => {
+  (req, res) => {
     console.log('GOOGLE/CALLBACK - req.user', req.user)
-    if (req.user.newUser) {
+    if (req.user.accountType === 'temp') {
       console.log('this is a new user')
       res.redirect('http://localhost:3000/google/choose-account')
     } else {
       console.log('this is an existing user')
       console.log('req.user', req.user)
-      res.redirect('http://localhost:3000')
+      if (req.user.accountType === 'teacher') res.redirect('http://localhost:3000/teacher')
+      else if (req.user.accountType === 'student') res.redirect('http://localhost:3000/student')
+      else res.redirect('http://localhost:3000/login')
     }
   }
 )

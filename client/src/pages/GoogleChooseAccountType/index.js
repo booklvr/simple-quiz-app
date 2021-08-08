@@ -46,7 +46,7 @@ const GoogleChooseAccountType = () => {
             Teacher
           </AccountTypeButton>
           <AccountTypeButton
-            to='/teacher/'
+            to='/student/'
             onClick={() => sendAccountType('student')}
           >
             Student

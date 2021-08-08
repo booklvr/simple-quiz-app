@@ -1,11 +1,6 @@
-import React, { useEffect } from 'react'
+import styled from 'styled-components';
 
-const TeacherHome = () => {
-  useEffect(() => {
-    // get current user
-  })
 
-  return <div>teacher home page</div>
-}
-
-export default TeacherHome
+export const TeacherHomeContainer = styled.div`
+  
+`;

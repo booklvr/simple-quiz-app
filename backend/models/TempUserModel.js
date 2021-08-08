@@ -5,6 +5,10 @@ import crypto from 'crypto'
 import Classroom from './ClassroomModel.js'
 
 const TempUserSchema = new mongoose.Schema({
+  accountType: {
+    type: String,
+    default: 'temp'
+  },
   googleId: {
     type: String,
     select: true,
@@ -22,6 +26,7 @@ const TempUserSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+
 })
 
 const TempUser = mongoose.model('TempUser', TempUserSchema)
