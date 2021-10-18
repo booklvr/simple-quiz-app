@@ -7,13 +7,14 @@ import { StudentHomeContainer } from './styled'
 const StudentHome = () => {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(newGoogleUser())
-  }, [dispatch])
+  // useEffect(() => {
+  //   dispatch(newGoogleUser())
+  // }, [dispatch])
 
   return (
     <StudentHomeContainer>
       welcome to the student home page
+      
     </StudentHomeContainer>
   )
 }
