@@ -19,7 +19,7 @@ const passportConfig = (passport) => {
           displayName: profile.displayName,
           email: profile.emails[0].value,
         }
-        console.log("WHAT THE FUCKS")
+
         try {
           // search for teacher
           let teacher = await Teacher.findOne({ googleId: profile.id })
@@ -40,7 +40,6 @@ const passportConfig = (passport) => {
             console.log('google strategy: found tempUser')
             done(null, tempUser)
           } else {
-
             console.log(
               'I NEED TO MAKE A NEW USER HERE SOMEHOW, ROUTE TO STUDENT ROUTE OR PARENT ROUTE'
             )
@@ -54,63 +53,75 @@ const passportConfig = (passport) => {
     )
   )
 
-  passport.use('custom', new CustomStrategy(function (req, done) {
-    console.log('inside the custom passport authentication')
-    Teacher.findById(req.user._id, ((err, user) => {
-      done(err, user)
-    }))
-
-    // try {
-    //   const teacher = await Teacher.findOne({ googleId: req.user.googleId })
-    //   const student = await Student.findOne({ googleId: req.user.googleId })
-    //   let user
-
-    //   if (teacher) {
-    //     user = teacher
-
-    //   } else if (student) {
-    //     user = student
-    //   } else {
-    //     return new Error('User not found')
-    //   }
-    //   done(err, user)
-    // } catch (error) {
-    //   console.log(error)
-    // }
-  }))
+  passport.use(
+    new CustomStrategy(function (req, done) {
+      console.log('inside the custom strategy')
+      console.log('req.user', req.user);
+      // User.findOne(
+      //   {
+      //     username: req.body.username,
+      //   },
+      //   function (err, user) {
+      //     done(err, user)
+      //   }
+      // )
+    })
+  )
 
   // with works with passport-local-mongoose
   // * need User.createStrategy because we change username field to email
-  passport.use(Teacher.createStrategy())
+  // passport.use(Teacher.createStrategy())
 
   passport.serializeUser((user, done) => {
-    let type = user.accountType;
-    done(null, {id: user.id, type: type})
+    console.log('serrializing user')
+
+    // let type = user.accountType
+    done(null, { id: user.id, accountType: user.accountType })
+
     // done(null, user.id)
   })
 
-  passport.deserializeUser((id, done) => {
+  passport.deserializeUser((data, done) => {
+    console.log('deserrializing user')
+    console.log('data', data)
 
-    Teacher.findById(id, (err, teacher) => {
-      if (teacher) {
-        done(err, teacher)
-      } else {
-        Student.findById(id, (err, student) => {
-          if (student) {
-            done(err, student)
-          } else {
-            TempUser.findById(id, (err, tempUser) => {
-              if (tempUser) {
-                done(err, tempUser)
-              }
-            })
-          }
-        })
-      }
-    })
+    if (data.accountType === 'student') {
+      console.log('deserializing student')
+      Student.findById(data.id, function (err, user) {
+        done(err, user)
+      })
+    } else if (data.accountType === 'teacher') {
+      console.log('deserializing teacher')
+      Teacher.findById(data.id, function (err, user) {
+        done(err, user)
+      })
+    } else {
+      console.log('deserializing temp user')
+      TempUser.findById(data.id, function (err, user) {
+        done(err, user)
+      })
+    }
 
-
-
+    // Teacher.findById(id, (err, teacher) => {
+    //   if (teacher) {
+    //     console.log('desserializing teacher')
+    //     done(err, teacher)
+    //   } else {
+    //     Student.findById(id, (err, student) => {
+    //       if (student) {
+    //         console.log('desserializing student')
+    //         done(err, student)
+    //       } else {
+    //         TempUser.findById(id, (err, tempUser) => {
+    //           if (tempUser) {
+    //             console.log('desserializing tempUser')
+    //             done(err, tempUser)
+    //           }
+    //         })
+    //       }
+    //     })
+    //   }
+    // })
   })
 }
 

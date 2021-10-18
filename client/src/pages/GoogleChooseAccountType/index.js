@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   AccountTypeButton,
   AccountTypeButtonsContainer,
@@ -7,6 +7,7 @@ import {
 import { createRealAccount, newGoogleUser } from '../../actions/newUserActions'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../components/Loader'
+import axios from 'axios'
 
 const GoogleChooseAccountType = () => {
   const dispatch = useDispatch()
@@ -14,23 +15,32 @@ const GoogleChooseAccountType = () => {
   const { userInfo, loading, error } = useSelector(
     (state) => state.newGoogleUser
   )
-  const [accountType, setAccountType] = useState('')
+
+  console.log('userInfo', userInfo)
+
+  // const [accountType, setAccountType] = useState('')
 
   useEffect(() => {
     dispatch(newGoogleUser())
   }, [dispatch])
 
-  const checkAgain = () => {
-    dispatch(newGoogleUser())
-  }
+  // const checkAgain = () => {
+  //   dispatch(newGoogleUser())
+  // }
 
-  useEffect(() => {
-    console.log('user info', userInfo)
-    console.log('loading', loading)
-  }, [userInfo])
+  // const checkAccount = () => {
+  //   dispatch(checkInfo())
+  //   console.log('finished checking info')
+  // }
 
   const sendAccountType = (type) => {
+    console.log('userInfo', userInfo)
     dispatch(createRealAccount(type, userInfo._id))
+  }
+
+  const checkUserInfo = async () => {
+    const { data } = await axios.get('/api/v1/auth/google/authenticated')
+    console.log(data)
   }
 
   return (
@@ -53,6 +63,7 @@ const GoogleChooseAccountType = () => {
           </AccountTypeButton>
         </AccountTypeButtonsContainer>
       )}
+      <button onClick={() => checkUserInfo()}>check if authenticated</button>
     </GoogleChooseAccountTypeContainer>
   )
 }

@@ -9,7 +9,8 @@ import Token from '../models/VerificationModel.js'
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js'
 
-
+// route
+// * /api/v1/
 export const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     console.log('figure out how you are going to be redirecting')

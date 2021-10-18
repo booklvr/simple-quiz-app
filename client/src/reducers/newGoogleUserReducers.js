@@ -5,7 +5,10 @@ import {
   SET_GOOGLE_ACCOUNT_TYPE,
 } from '../constants/userConstants'
 
-export const newGoogleUserReducer = (state = {}, action) => {
+export const newGoogleUserReducer = (
+  state = { loading: false, userInfo: {} },
+  action
+) => {
   console.log('/newgoogleuserreducer')
   const { type, payload } = action
 

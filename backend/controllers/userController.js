@@ -16,7 +16,11 @@ import passport from 'passport'
 export const registerFromGoogle = catchAsync(async (req, res, next) => {
   const { id, type } = req.body
 
+  console.log('id', 'type', id, type)
+
   const { googleId } = await TempUser.findById(id).select('googleId')
+
+  console.log('googleId', googleId)
 
   if (googleId) {
     // IF NOT GOOGLE ID NEW ERROR
@@ -24,7 +28,7 @@ export const registerFromGoogle = catchAsync(async (req, res, next) => {
     // create the new user
     const newUser = {
       googleId,
-      type,
+      accountType: type,
       displayName: req.user.displayName,
       email: req.user.email,
     }
@@ -32,10 +36,7 @@ export const registerFromGoogle = catchAsync(async (req, res, next) => {
     const tempUserId = req.user._id
     console.log('newUser', newUser)
 
-    // logout the tempuser
-    console.log('logout the temp user')
-    req.logout()
-    delete req.session
+    // delete req.session
 
     // delete the temporary user
     console.log('deleting the temp user')
@@ -45,69 +46,80 @@ export const registerFromGoogle = catchAsync(async (req, res, next) => {
     if (!deletedTempUser)
       return next(new AppError('No document found with that ID', 404))
 
-
-    // req.session.destroy()
-
-
-
     if (type === 'teacher') {
-
       console.log('creating new teacher instance')
       const newTeacher = await Teacher.create(newUser)
 
-
       if (!newTeacher) return next(new AppError('Teacher could not be created'))
 
-      req.login(newTeacher, ((err) => {
-        if (err) { return next(err) }
-        res.status(201).json({
-          status: 'success',
-          data: newTeacher,
-        })
-      }))
+      // logout the tempuser
+      console.log('logout the temp user')
+      req.logout()
+      req.session.destroy((err) => {
+        if (!err) {
+          console.log('no error logging out temp user')
+        } else {
+          res.status(500).json({
+            status: 'error',
+            message: 'could not login new user',
+          })
+        }
+      })
+
+      req.login(newTeacher, (err) => {
+        if (!err) {
+          console.log('attempting to login new user -- no error')
+          return res.status(201).json({
+            status: 'success',
+            message: `successfully logged in ${req.user}`,
+            user: req.user,
+          })
+        } else {
+          console.log('and the error is....', err)
+        }
+      })
+
+      // passport.authenticate('custom')
+
+      // passport.authenticate('custom', { failureRedirect: '/login' })
+      // req.login(newTeacher, (err) => {
+      //   if (err) {
+      //     return next(err)
+      //   }
+      //   console.log('made it here')
+      //   res.status(201).json({
+      //     status: 'success',
+      //     data: newTeacher,
+      //   })
+      //   console.log('what the fuck 1')
+      // })
 
       console.log('newTeacher', newTeacher)
 
-      // passport.authenticate('custom', { failureRedirect: '/login' })
-
-
-      // if (req.isAuthenticated()) {
-      //   console.log('this fucker is still authenticated')
-      //   console.log(req.user.id, 'req.user.id')
-      // } else {
-      //   console.log('we lost authentication.')
+      res.status(201).json({
+        status: 'success',
+        message: 'User registered successfully',
+        data: {
+          user: req.user,
+        },
+      })
       // }
-      // passport.authenticate('google', {
-      //   failureRedirect: 'http://localhost/test',
-      //   // successRedirect: 'http://localhost:3000',
-      // },
-      //   () => {
-      //     console.log('trying to authenticate user in the register google route')
-
-      //     res.status(201).json({
-      //       status: 'success',
-      //       message: 'User registered successfully',
-      //       data: {
-      //         user: req.user,
-      //       }
-      //     })
-      //   }
       // )
-
     } else {
       const newStudent = await Student.create(newUser)
 
       if (!newStudent) return next(new AppError('Student could not be created'))
 
-      req.login(newStudent, ((err) => {
-        if (err) { return next(err) }
+      req.login(newStudent, (err) => {
+        if (err) {
+          return next(err)
+        }
         res.status(201).json({
           status: 'success',
           data: newStudent,
         })
-      }))
+      })
     }
-
 
     // passport.authenticate('custom', { failureRedirect: 'http://localhost:3000/test' }), ((req, res) => {
     //   res.status(201).json({
@@ -115,7 +127,6 @@ export const registerFromGoogle = catchAsync(async (req, res, next) => {
     //     data: req.user,
     //   })
     // })
-
 
     // DELETE THE OLD USER
   } else {
@@ -184,6 +195,12 @@ export const register = catchAsync(async (req, res, next) => {
 export const getUserId = (req, res, next) => {
   req.params.id = req.user.id
   next()
+}
+
+export const deleteAllModels = async () => {
+  TempUser.remove({}, (err) => console.log('tempModelDropped'))
+  Teacher.remove({}, (err) => console.log('teacherModelDropped'))
+  Student.remove({}, (err) => console.log('studentModelDropped'))
 }
 
 export const getAllUsers = getAllFactory(Teacher)

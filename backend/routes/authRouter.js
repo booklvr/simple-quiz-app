@@ -33,19 +33,40 @@ router.get(
     console.log('GOOGLE/CALLBACK - req.user', req.user)
     if (req.user.accountType === 'temp') {
       console.log('this is a new user')
+      console.log('req.isAuthenticated', req.isAuthenticated())
       res.redirect('http://localhost:3000/google/choose-account')
     } else {
       console.log('this is an existing user')
       console.log('req.user', req.user)
-      if (req.user.accountType === 'teacher') res.redirect('http://localhost:3000/teacher')
-      else if (req.user.accountType === 'student') res.redirect('http://localhost:3000/student')
+      if (req.user.accountType === 'teacher') {
+        console.log(
+          'google auth teacher req.isAuthenticated',
+          req.isAuthenticated()
+        )
+        res.redirect('http://localhost:3000/teacher')
+      } else if (req.user.accountType === 'student')
+        res.redirect('http://localhost:3000/student')
       else res.redirect('http://localhost:3000/login')
     }
   }
 )
+
+// router.get('/google/test', (req, res) => {
+//   console.log('this is a mother fucking test')
+
+//   if (req.isAuthenticated()) {
+//     console.log('user is authenticated')
+//   } else {
+//     console.log('obvisouly you arent authenticated')
+//   }
+//   res.status(200).json({
+//     user: 'test user',
+//   })
+// })
+
 router.get('/google/authenticated', (req, res) => {
-  console.log('/GOOGLE/AUTHENTICATED')
-  console.log(req.session.passport.user, '=user')
+  
+
   if (req.isAuthenticated()) {
     res.status(200).json({
       user: req.user,

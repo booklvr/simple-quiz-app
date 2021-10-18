@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { HomeContainer } from './styled'
-import axios from 'axios';
+// import axios from 'axios';
 
 const Home = () => {
 
