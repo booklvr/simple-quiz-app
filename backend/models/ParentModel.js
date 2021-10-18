@@ -4,10 +4,10 @@ import validator from 'validator'
 import crypto from 'crypto'
 import Classroom from './ClassroomModel.js'
 
-const TempUserSchema = new mongoose.Schema({
+const ParentSchema = new mongoose.Schema({
   accountType: {
     type: String,
-    default: 'temp'
+    default: 'parent',
   },
   googleId: {
     type: String,
@@ -26,10 +26,9 @@ const TempUserSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-
 })
 
-const TempUser = mongoose.model('TempUser', TempUserSchema)
-export default TempUser
+const Parent = mongoose.model('Parent', ParentSchema)
+export default Parent
 
 // export default mongoose.model('User', UserSchema)

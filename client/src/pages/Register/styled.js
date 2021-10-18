@@ -1,14 +1,27 @@
 import styled from 'styled-components/macro'
-// import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export const RegisterPageContainer = styled.div`
   display: flex;
   height: calc(100vh - var(--navbar-height));
   background-color: var(--purple);
   width: 100vw;
-  /* display: flex; */
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+`
+
+export const AccountTypeButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+export const AccountTypeButton = styled.button`
+  padding: 2rem;
+  font-size: 2rem;
+  margin: 1rem;
 `
 
 export const RegisterFormContainer = styled.div`
@@ -79,3 +92,8 @@ export const RegisterForm = styled.form`
 export const RegisterLabel = styled.label``
 
 export const RegisterInput = styled.input``
+
+export const Login = styled(Link)`
+  text-decoration: none;
+  cursor: pointer;
+`

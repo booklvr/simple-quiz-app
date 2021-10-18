@@ -2,11 +2,12 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { Strategy as CustomStrategy } from 'passport-custom'
 import mongoose from 'mongoose'
 import Teacher from '../models/TeacherModel.js'
-import TempUser from '../models/TempUserModel.js'
+import Parent from '../models/ParentModel.js'
 import Student from '../models/StudentModel.js'
 
 const passportConfig = (passport) => {
   passport.use(
+    'google',
     new GoogleStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -24,11 +25,11 @@ const passportConfig = (passport) => {
           // search for teacher
           let teacher = await Teacher.findOne({ googleId: profile.id })
           let student = await Student.findOne({ googleId: profile.id })
-          let tempUser = await TempUser.findOne({ googleId: profile.id })
+          let parent = await Parent.findOne({ googleId: profile.id })
 
           console.log('teacher', teacher)
           console.log('student', student)
-          console.log('tempUser', tempUser)
+          console.log('parent', parent)
 
           if (teacher) {
             console.log('google strategy: found teacher')
@@ -36,15 +37,172 @@ const passportConfig = (passport) => {
           } else if (student) {
             console.log('google strategy: found student')
             done(null, student)
-          } else if (tempUser) {
-            console.log('google strategy: found tempUser')
-            done(null, tempUser)
+          } else if (parent) {
+            console.log('google strategy: found parent')
+            done(null, parent)
           } else {
-            console.log(
-              'I NEED TO MAKE A NEW USER HERE SOMEHOW, ROUTE TO STUDENT ROUTE OR PARENT ROUTE'
+            console.log('account not found')
+            console.log('you have to re route to register account')
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    )
+  )
+  passport.use(
+    'google-teacher',
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/api/v1/auth/google/teacher/callback',
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        const googleUser = {
+          googleId: profile.id,
+          displayName: profile.displayName,
+          email: profile.emails[0].value,
+        }
+
+        try {
+          // search for teacher
+          let teacher = await Teacher.findOne({ googleId: profile.id })
+          let student = await Student.findOne({ googleId: profile.id })
+          let parent = await Parent.findOne({ googleId: profile.id })
+
+          console.log('teacher', teacher)
+          console.log('student', student)
+          console.log('parent', parent)
+
+          if (teacher) {
+            console.log('google strategy: found teacher')
+            done(null, teacher)
+          } else if (student) {
+            console.log('google strategy: found student')
+            console.log('you can only have one registered account per email')
+            const err = new Error(
+              'you can only have one registed account per email'
             )
-            const newUser = await TempUser.create(googleUser)
-            done(null, newUser)
+            done(err)
+          } else if (parent) {
+            console.log('google strategy: found parent')
+            console.log('you can only have one registered account per email')
+            const err = new Error(
+              'you can only have one registed account per email'
+            )
+          } else {
+            console.log('creating new teacher')
+
+            const teacher = await Teacher.create(googleUser)
+            done(null, teacher)
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    )
+  )
+
+  passport.use(
+    'google-student',
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/api/v1/auth/google/student/callback',
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        const googleUser = {
+          googleId: profile.id,
+          displayName: profile.displayName,
+          email: profile.emails[0].value,
+        }
+
+        try {
+          // search for teacher
+          let teacher = await Teacher.findOne({ googleId: profile.id })
+          let student = await Student.findOne({ googleId: profile.id })
+          let parent = await Parent.findOne({ googleId: profile.id })
+
+          console.log('teacher', teacher)
+          console.log('student', student)
+          console.log('parent', parent)
+
+          if (student) {
+            console.log('google strategy: found student')
+            done(null, student)
+          } else if (teacher) {
+            console.log('google strategy: found teacher')
+            console.log('you can only have one registered account per email')
+            const err = new Error(
+              'you can only have one registed account per email'
+            )
+            done(err)
+          } else if (parent) {
+            console.log('google strategy: found parent')
+            console.log('you can only have one registered account per email')
+            const err = new Error(
+              'you can only have one registed account per email'
+            )
+          } else {
+            console.log('creating new student')
+
+            const student = await Student.create(googleUser)
+            done(null, student)
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    )
+  )
+
+  passport.use(
+    'google-parent',
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: '/api/v1/auth/google/parent/callback',
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        const googleUser = {
+          googleId: profile.id,
+          displayName: profile.displayName,
+          email: profile.emails[0].value,
+        }
+
+        try {
+          // search for teacher
+          let teacher = await Teacher.findOne({ googleId: profile.id })
+          let student = await Student.findOne({ googleId: profile.id })
+          let parent = await Parent.findOne({ googleId: profile.id })
+
+          console.log('teacher', teacher)
+          console.log('student', student)
+          console.log('parent', parent)
+
+          if (parent) {
+            console.log('google strategy: found parent')
+            done(null, parent)
+          } else if (teacher) {
+            console.log('google strategy: found teacher')
+            console.log('you can only have one registered account per email')
+            const err = new Error(
+              'you can only have one registed account per email'
+            )
+            done(err)
+          } else if (student) {
+            console.log('google strategy: found student')
+            console.log('you can only have one registered account per email')
+            const err = new Error(
+              'you can only have one registed account per email'
+            )
+          } else {
+            console.log('creating new parent')
+            const parent = await Parent.create(googleUser)
+            done(null, parent)
           }
         } catch (err) {
           console.log(err)
@@ -56,7 +214,7 @@ const passportConfig = (passport) => {
   passport.use(
     new CustomStrategy(function (req, done) {
       console.log('inside the custom strategy')
-      console.log('req.user', req.user);
+      console.log('req.user', req.user)
       // User.findOne(
       //   {
       //     username: req.body.username,
@@ -96,32 +254,11 @@ const passportConfig = (passport) => {
         done(err, user)
       })
     } else {
-      console.log('deserializing temp user')
-      TempUser.findById(data.id, function (err, user) {
+      console.log('deserializing parent')
+      Parent.findById(data.id, function (err, user) {
         done(err, user)
       })
     }
-
-    // Teacher.findById(id, (err, teacher) => {
-    //   if (teacher) {
-    //     console.log('desserializing teacher')
-    //     done(err, teacher)
-    //   } else {
-    //     Student.findById(id, (err, student) => {
-    //       if (student) {
-    //         console.log('desserializing student')
-    //         done(err, student)
-    //       } else {
-    //         TempUser.findById(id, (err, tempUser) => {
-    //           if (tempUser) {
-    //             console.log('desserializing tempUser')
-    //             done(err, tempUser)
-    //           }
-    //         })
-    //       }
-    //     })
-    //   }
-    // })
   })
 }
 

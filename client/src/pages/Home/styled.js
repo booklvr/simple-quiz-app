@@ -12,7 +12,7 @@ export const HomeContainer = styled.div`
 
 export const LoginLink = styled(Link)`
   padding: 2rem;
-  font-size: 2rem;
+  font-size: 1rem;
   text-decoration: none;
   cursor: pointer;
   border: 1px solid black;

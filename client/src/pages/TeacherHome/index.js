@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import Login from '../../components/Login'
-import Register from '../../components/Register'
 
 // import { newGoogleUser } from '../../actions/newUserActions'
 // import { userInfo } from '../../actions/userActions'
@@ -22,7 +20,6 @@ const TeacherHome = () => {
   return (
     <TeacherHomeContainer>
       welcome to the teacher home page
-      <Register></Register>
     </TeacherHomeContainer>
   )
 }

@@ -77,6 +77,9 @@ export const LoginLabel = styled.label``
 export const LoginInput = styled.input``
 
 export const RegisterLink = styled(Link)`
+  padding: 2rem;
+  font-size: 1rem;
   text-decoration: none;
   cursor: pointer;
+  border: 1px solid black;
 `
