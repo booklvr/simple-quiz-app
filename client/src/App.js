@@ -8,6 +8,7 @@ import Register from './pages/Register'
 import StudentHome from './pages/StudentHome'
 import TeacherHome from './pages/TeacherHome'
 import Login from './pages/Login'
+import ParentHome from './pages/ParentHome'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         />
         <Route exact path='/teacher' component={TeacherHome} />
         <Route exact path='/student' component={StudentHome} />
+        <Route exact path='/parent' component={ParentHome} />
       </Switch>
     </Router>
   )

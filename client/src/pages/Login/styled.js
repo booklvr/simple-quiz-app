@@ -33,14 +33,18 @@ export const LoginH2 = styled.h2`
 export const GoogleLinkContainer = styled.div`
   /* display: flex;
   flex-direction: column; */
-  background-color: pink;
   width: 100%;
 `
 
 export const GoogleLink = styled.a`
   display: flex;
   flex-direction: row;
-  height: 30px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
   text-decoration: none;
   background-color: var(--google);
 `
@@ -66,10 +70,13 @@ export const OrOption = styled.div`
   text-align: center;
 `
 
-export const LoginForm = styled.form`
+export const LoginEmailForm = styled.form``
+
+export const LoginFormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-content: center;
+  justify-content: center;
 `
 
 export const LoginLabel = styled.label``
@@ -82,4 +89,20 @@ export const RegisterLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
   border: 1px solid black;
+`
+
+export const EmailFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+`
+
+export const LoginSubmitButton = styled.button`
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
 `

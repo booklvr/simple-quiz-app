@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StudentHomeContainer = styled.div`
+export const ParentHomeContainer = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;

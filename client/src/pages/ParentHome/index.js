@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import { newGoogleUser } from '../../actions/newUserActions'
-import { getStudentCredentials } from '../../actions/studentActions'
+import { getParentCredentials } from '../../actions/parentActions'
 import Loader from '../../components/Loader'
 
-import { StudentHomeContainer } from './styled'
+// import { newGoogleUser } from '../../actions/newUserActions'
+// import { userInfo } from '../../actions/userActions'
 
-const StudentHome = () => {
+import { ParentHomeContainer } from './styled'
+
+const ParentHome = () => {
   const dispatch = useDispatch()
 
   const { userInfo, loading, error } = useSelector((state) => state.user)
@@ -16,22 +18,22 @@ const StudentHome = () => {
 
   // console.log(userInfo, loading, error)
   useEffect(() => {
-    dispatch(getStudentCredentials())
+    dispatch(getParentCredentials())
   }, [dispatch])
 
   return (
-    <StudentHomeContainer>
+    <ParentHomeContainer>
       {' '}
       {(loading && <Loader />) || (
         <div>
-          <h1>Welcome to the student homepage</h1>
+          <h1>Welcome to the parent homepage</h1>
           {(userInfo && (
             <div>it is great to see you again {userInfo.displayName}</div>
           )) || <div>Who on earth are you</div>}
         </div>
       )}
-    </StudentHomeContainer>
+    </ParentHomeContainer>
   )
 }
 
-export default StudentHome
+export default ParentHome
