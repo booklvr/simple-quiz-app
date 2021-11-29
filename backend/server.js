@@ -14,6 +14,10 @@ import MongoStore from 'connect-mongo'
 // import routers
 import userRouter from './routes/userRouter.js'
 import authRouter from './routes/authRouter.js'
+import teacherRouter from './routes/teacherRouter.js'
+import parentRouter from './routes/parentRouter.js'
+import studentRouter from './routes/studentRouter.js'
+
 import passportConfig from './config/passport.js'
 
 const __dirname = path.resolve()
@@ -34,6 +38,7 @@ app.use(
     credentials: true, // allow session cookie from browser to pass through
   })
 )
+
 app.use(express.json())
 
 // ROUTES
@@ -79,6 +84,9 @@ app.use(passport.session())
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', userRouter)
+app.use('/api/v1/teachers', teacherRouter)
+app.use('/api/v1/parents', parentRouter)
+app.use('/api/v1/students', studentRouter)
 
 const httpServer = createServer()
 const io = new Server(httpServer, {

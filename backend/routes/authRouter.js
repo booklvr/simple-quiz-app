@@ -1,7 +1,11 @@
 import express from 'express'
 import passport from 'passport'
 import Teacher from '../models/TeacherModel.js'
-import { isAuthenticated, logout } from '../controllers/authController.js'
+import {
+  checkForExistingAccount,
+  isAuthenticated,
+  logout,
+} from '../controllers/authController.js'
 
 const router = express.Router()
 // @desc Auth with Google
@@ -65,15 +69,25 @@ router.get(
 // @route GET api/v1/auth/google/teacher/callback
 router.get(
   '/google/callback',
-  passport.authenticate(
-    'google',
-    {
-      successRedirect: 'http://localhost:3000/student',
-    },
-    (req, res) => {
-      console.log(req.user)
-    }
-  )
+  checkForExistingAccount,
+  passport.authenticate('google', {
+    failureRedirect: 'http://localhost:3000/register',
+  }),
+  (req, res) => {
+    console.log('GOOGLE/CALLBACK - req.user', req.user)
+
+    if (req.user.accountType === 'teacher') {
+      // return res.status(200).json({
+      //   status: 'success',
+      //   message: 'logged in successfully',
+      //   user: req.user,
+      // })
+      res.redirect(`http://localhost:3000/teacher`)
+    } else if (req.user.accountType === 'student')
+      res.redirect('http://localhost:3000/parent')
+    else if (req.user.accountType === 'student')
+      res.redirect('http://localhost:3000/parent')
+  }
 )
 
 // @desc Google OAuth Teacher Callback
@@ -126,13 +140,15 @@ router.get(
   }
 )
 
-router.get('/google/authenticated', (req, res) => {
+router.get('/authenticated', (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).json({
+      status: 'success',
+      message: `successfully authenticated ${req.user.displayName}`,
       user: req.user,
     })
   } else {
-    res.status(404)
+    res.status(404).json({})
     throw new Error('User not found')
   }
 })

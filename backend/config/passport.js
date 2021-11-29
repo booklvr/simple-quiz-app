@@ -14,12 +14,14 @@ const passportConfig = (passport) => {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: '/api/v1/auth/google/callback',
       },
-      async (accessToken, refreshToken, profile, done) => {
+      async (req, accessToken, refreshToken, profile, done) => {
         const googleUser = {
           googleId: profile.id,
           displayName: profile.displayName,
           email: profile.emails[0].value,
         }
+
+        console.log('req.locals', req.locals)
 
         try {
           // search for teacher
@@ -41,8 +43,7 @@ const passportConfig = (passport) => {
             console.log('google strategy: found parent')
             done(null, parent)
           } else {
-            console.log('account not found')
-            console.log('you have to re route to register account')
+            done(null, false)
           }
         } catch (err) {
           console.log(err)
