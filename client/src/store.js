@@ -2,21 +2,46 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import { newGoogleUserReducer } from './reducers/newGoogleUserReducers'
+// newUserReducers
+import {
+  newUserReducer,
+  registerWithEmailReducer,
+  checkForExistingUserReducer,
+} from './reducers/newUserReducers'
+// --------------------------------------
+
+// userReducers
+import {
+  loginWithEmailReducer,
+  userLogoutReducer,
+  userReducer,
+  verifyLoggedInUserReducer,
+} from './reducers/userReducers'
+// ------------------------------
+
+// messageReducers
+import { messagesReducer } from './reducers/messagesReducer'
+// ----------------------------------------------------------
 
 const reducer = combineReducers({
   //reducers
-  newGoogleUser: newGoogleUserReducer,
-  // userLogin: userLoginReducer,
+  newUser: newUserReducer,
+  checkForExistingUser: checkForExistingUserReducer,
+  registerWithEmail: registerWithEmailReducer,
+  user: userReducer,
+  userLogout: userLogoutReducer,
+  verifyLoggedInUser: verifyLoggedInUserReducer,
+  loginWithEmail: loginWithEmailReducer,
+  messages: messagesReducer,
 })
 
 // from local storage
-// const userInfoFromStorage = localStorage.getItem('userInfo')
-//   ? JSON.parse(localStorage.getItem('userInfo'))
-//   : null
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo'))
+  : null
 
 const initialState = {
-  // from local storage
+  user: { ...userInfoFromStorage },
 }
 
 const middleware = [thunk]

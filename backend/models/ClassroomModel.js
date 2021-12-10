@@ -16,6 +16,10 @@ const classroomSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
+    inviteCode: {
+      type: String,
+      default: 
+    },
     slug: String,
   },
   {
@@ -52,7 +56,6 @@ classroomSchema.pre('save', function (next) {
 });
 
 classroomSchema.post('findOneAndDelete', async function (classroom) {
-  console.log('document', classroom);
 
   if (classroom) {
     const deleteResults = await Student.deleteMany({

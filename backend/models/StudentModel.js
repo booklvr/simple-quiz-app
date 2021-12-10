@@ -1,16 +1,29 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
+import passportLocalMongoose from 'passport-local-mongoose'
 // const Classroom = require('./classroomModel');
 
-const studentSchema = new mongoose.Schema(
+const StudentSchema = new mongoose.Schema(
   {
     accountType: {
       type: String,
       default: 'student',
     },
-    name: {
+    familyName: {
       type: String,
-      // required: [true, 'Student must have a name'],
+    },
+    givenName: {
+      type: String,
+    },
+    dateOfBirth: {
+      type: String,
+    },
+    // classroomID: {
+    //   type: mongoose.Schema.ObjectId,
+    //   ref: 'Classroom',
+    // },
+    classroomID: {
+      type: Number,
     },
     googleId: {
       type: String,
@@ -34,10 +47,11 @@ const studentSchema = new mongoose.Schema(
       type: String,
       // required: [true, 'must list a student gender'], // remove later?
     },
-
   },
   { timestamps: true }
 )
+
+StudentSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 
 //CALCULATE AVERAGE GAME SCORE
 // reviewSchema.statics.calcAverageGameScore = async function (classroomId) {
@@ -46,4 +60,4 @@ const studentSchema = new mongoose.Schema(
 
 //CALCULATE AVERAGE PARTICIPATION SCORE
 
-export default mongoose.model('Student', studentSchema)
+export default mongoose.model('Student', StudentSchema)

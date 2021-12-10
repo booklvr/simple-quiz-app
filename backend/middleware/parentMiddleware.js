@@ -9,7 +9,6 @@ import AppError from '../utils/appError.js'
 // * /api/v1/
 export const isParent = (req, res, next) => {
   if (req.user.accountType === 'parent') {
-    console.log('yes, this is in fact a parent, you may proceed')
     return next()
   } else {
     console.log(

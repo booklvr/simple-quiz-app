@@ -1,59 +1,80 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import {
   HeaderContainer,
   RegisterPageContainer,
   RegisterH1,
-  RegisterH2,
   RegisterFormContainer,
   RegisterLinksContainer,
   RegisterLinkIcon,
   RegisterLinkText,
   GoogleRegisterLink,
-  OrOption,
   AccountTypeButtonContainer,
   AccountTypeButton,
+  AccountTypesContainer,
+  AccountTypesMessage,
+  EmailRegisterLink,
 } from './styled'
 import googleIcon from '../../assets/icons/google-icon-light.svg'
 import { LoginLink } from '../Home/styled'
+import { setAccountType } from '../../actions/newUserActions'
+import { FaEnvelope } from 'react-icons/fa'
+import EmailRegisterForm from '../../components/EmailRegisterForm'
 
 const Register = ({ match }) => {
-  const [accountType, setAccountType] = useState('')
+  const dispatch = useDispatch()
+  const { accountType } = useSelector((state) => state.newUser)
+
+  console.log('accountType', accountType)
+
+  const [registerWithEmail, setRegisterWithEmail] = useState(false)
+
+  const updateAccountType = (type) => {
+    dispatch(setAccountType(type))
+  }
+
+  useEffect(() => {
+    if (accountType === '') {
+      dispatch(setAccountType('teacher'))
+    }
+  }, [dispatch, accountType])
 
   return (
     <RegisterPageContainer>
-      {(!accountType && (
-        <AccountTypeButtonContainer>
-          <AccountTypeButton
-            onClick={() => {
-              setAccountType('teacher')
-            }}
-          >
-            Teacher
-          </AccountTypeButton>
-          <AccountTypeButton
-            onClick={() => {
-              setAccountType('student')
-            }}
-          >
-            Student
-          </AccountTypeButton>
-          <AccountTypeButton
-            onClick={() => {
-              setAccountType('parent')
-            }}
-          >
-            Parent
-          </AccountTypeButton>
-        </AccountTypeButtonContainer>
-      )) || (
-        <RegisterFormContainer>
-          <HeaderContainer>
-            <RegisterH1>Welcome to the English Quiz site</RegisterH1>
-            <RegisterH2>
-              Sign in with google or enter your email to create a {accountType}{' '}
-              account.
-            </RegisterH2>
-          </HeaderContainer>
+      <RegisterFormContainer>
+        <HeaderContainer>
+          <RegisterH1>Sign Up</RegisterH1>
+        </HeaderContainer>
+        <AccountTypesContainer>
+          <AccountTypesMessage>Register as a </AccountTypesMessage>
+          <AccountTypeButtonContainer>
+            <AccountTypeButton
+              onClick={() => updateAccountType('teacher')}
+              current={'teacher' === accountType}
+            >
+              Teacher
+            </AccountTypeButton>
+            <AccountTypeButton
+              onClick={() => updateAccountType('student')}
+              current={'student' === accountType}
+            >
+              Student
+            </AccountTypeButton>
+            <AccountTypeButton
+              onClick={() => updateAccountType('parent')}
+              current={'parent' === accountType}
+            >
+              Parent
+            </AccountTypeButton>
+          </AccountTypeButtonContainer>
+        </AccountTypesContainer>
+        {(registerWithEmail && (
+          <EmailRegisterForm
+            accountType={accountType}
+            setRegisterWithEmail={setRegisterWithEmail}
+          ></EmailRegisterForm>
+        )) || (
           <RegisterLinksContainer>
             <GoogleRegisterLink
               href={`http://localhost:8000/api/v1/auth/google/${accountType}`}
@@ -61,14 +82,15 @@ const Register = ({ match }) => {
               <RegisterLinkIcon src={googleIcon} />
               <RegisterLinkText>Sign In With Google</RegisterLinkText>
             </GoogleRegisterLink>
+            <EmailRegisterLink onClick={() => setRegisterWithEmail(true)}>
+              <FaEnvelope></FaEnvelope>
+              <RegisterLinkText>Sign in with your email</RegisterLinkText>
+            </EmailRegisterLink>
           </RegisterLinksContainer>
-          <OrOption>-- or --</OrOption>
-          <p>register form goes here</p>
-          <LoginLink to='/login'>
-            if you already have an account login
-          </LoginLink>
-        </RegisterFormContainer>
-      )}
+        )}
+
+        <LoginLink to='/login'>if you already have an account login</LoginLink>
+      </RegisterFormContainer>
     </RegisterPageContainer>
   )
 }

@@ -1,5 +1,5 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import { Strategy as CustomStrategy } from 'passport-custom'
+// import { Strategy as CustomStrategy } from 'passport-custom'
 import mongoose from 'mongoose'
 import Teacher from '../models/TeacherModel.js'
 import Parent from '../models/ParentModel.js'
@@ -19,9 +19,9 @@ const passportConfig = (passport) => {
           googleId: profile.id,
           displayName: profile.displayName,
           email: profile.emails[0].value,
+          givenName: profile.name.givenName,
+          familyName: profile.name.familyName,
         }
-
-        console.log('req.locals', req.locals)
 
         try {
           // search for teacher
@@ -29,10 +29,7 @@ const passportConfig = (passport) => {
           let student = await Student.findOne({ googleId: profile.id })
           let parent = await Parent.findOne({ googleId: profile.id })
 
-          console.log('teacher', teacher)
-          console.log('student', student)
-          console.log('parent', parent)
-
+          // pass through the correct account type
           if (teacher) {
             console.log('google strategy: found teacher')
             done(null, teacher)
@@ -64,6 +61,8 @@ const passportConfig = (passport) => {
           googleId: profile.id,
           displayName: profile.displayName,
           email: profile.emails[0].value,
+          givenName: profile.name.givenName,
+          familyName: profile.name.familyName,
         }
 
         try {
@@ -72,10 +71,6 @@ const passportConfig = (passport) => {
           let student = await Student.findOne({ googleId: profile.id })
           let parent = await Parent.findOne({ googleId: profile.id })
 
-          console.log('teacher', teacher)
-          console.log('student', student)
-          console.log('parent', parent)
-
           if (teacher) {
             console.log('google strategy: found teacher')
             done(null, teacher)
@@ -83,15 +78,16 @@ const passportConfig = (passport) => {
             console.log('google strategy: found student')
             console.log('you can only have one registered account per email')
             const err = new Error(
-              'you can only have one registed account per email'
+              'you can only have one registered account per email'
             )
-            done(err)
+            done(err, false)
           } else if (parent) {
             console.log('google strategy: found parent')
             console.log('you can only have one registered account per email')
             const err = new Error(
               'you can only have one registed account per email'
             )
+            done(err, false)
           } else {
             console.log('creating new teacher')
 
@@ -104,7 +100,6 @@ const passportConfig = (passport) => {
       }
     )
   )
-
   passport.use(
     'google-student',
     new GoogleStrategy(
@@ -114,10 +109,13 @@ const passportConfig = (passport) => {
         callbackURL: '/api/v1/auth/google/student/callback',
       },
       async (accessToken, refreshToken, profile, done) => {
+        console.log('profile', profile)
         const googleUser = {
           googleId: profile.id,
           displayName: profile.displayName,
           email: profile.emails[0].value,
+          givenName: profile.name.givenName,
+          familyName: profile.name.familyName,
         }
 
         try {
@@ -136,16 +134,20 @@ const passportConfig = (passport) => {
           } else if (teacher) {
             console.log('google strategy: found teacher')
             console.log('you can only have one registered account per email')
-            const err = new Error(
-              'you can only have one registed account per email'
-            )
-            done(err)
+            const err = 'you fucked up'
+
+            // const err = new Error(
+            //   'you can only have one registed account per email'
+            // )
+            done(err, false)
           } else if (parent) {
             console.log('google strategy: found parent')
             console.log('you can only have one registered account per email')
-            const err = new Error(
-              'you can only have one registed account per email'
-            )
+            const err = 'you fucked up'
+            // const err = new Error(
+            //   'you can only have one registed account per email'
+            // )
+            done(err, false)
           } else {
             console.log('creating new student')
 
@@ -153,7 +155,8 @@ const passportConfig = (passport) => {
             done(null, student)
           }
         } catch (err) {
-          console.log(err)
+          console.log('caught error:', err)
+          // done(err, false)
         }
       }
     )
@@ -172,6 +175,8 @@ const passportConfig = (passport) => {
           googleId: profile.id,
           displayName: profile.displayName,
           email: profile.emails[0].value,
+          givenName: profile.name.givenName,
+          familyName: profile.name.familyName,
         }
 
         try {
@@ -193,7 +198,7 @@ const passportConfig = (passport) => {
             const err = new Error(
               'you can only have one registed account per email'
             )
-            done(err)
+            done(err, false)
           } else if (student) {
             console.log('google strategy: found student')
             console.log('you can only have one registered account per email')
@@ -211,28 +216,17 @@ const passportConfig = (passport) => {
       }
     )
   )
-
-  passport.use(
-    new CustomStrategy(function (req, done) {
-      console.log('inside the custom strategy')
-      console.log('req.user', req.user)
-      // User.findOne(
-      //   {
-      //     username: req.body.username,
-      //   },
-      //   function (err, user) {
-      //     done(err, user)
-      //   }
-      // )
-    })
-  )
+  passport.use('studentLocal', Student.createStrategy())
+  passport.use('parentLocal', Parent.createStrategy())
+  passport.use('teacherLocal', Teacher.createStrategy())
 
   // with works with passport-local-mongoose
   // * need User.createStrategy because we change username field to email
-  // passport.use(Teacher.createStrategy())
 
   passport.serializeUser((user, done) => {
     console.log('serrializing user')
+
+    console.log(user)
 
     // let type = user.accountType
     done(null, { id: user.id, accountType: user.accountType })
@@ -254,7 +248,7 @@ const passportConfig = (passport) => {
       Teacher.findById(data.id, function (err, user) {
         done(err, user)
       })
-    } else {
+    } else if (data.accountType === 'parent') {
       console.log('deserializing parent')
       Parent.findById(data.id, function (err, user) {
         done(err, user)

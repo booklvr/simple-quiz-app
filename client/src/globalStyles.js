@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
 
   * {
     box-sizing: border-box;
-    color: black;
+    // color: black;
   }
 
   body {

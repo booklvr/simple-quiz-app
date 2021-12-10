@@ -13,6 +13,12 @@ const ParentSchema = new mongoose.Schema({
     type: String,
     select: true,
   },
+  familyName: {
+    type: String,
+  },
+  givenName: {
+    type: String,
+  },
   displayName: {
     type: String,
   },
@@ -27,6 +33,8 @@ const ParentSchema = new mongoose.Schema({
     default: true,
   },
 })
+
+ParentSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 
 const Parent = mongoose.model('Parent', ParentSchema)
 export default Parent

@@ -6,14 +6,11 @@ import {
   isAuthenticated,
   logout,
 } from '../controllers/authController.js'
+import { verifyLoggedInUser } from '../controllers/userController.js'
 
 const router = express.Router()
 // @desc Auth with Google
 // @route get api/v1/auth/google
-
-// router.get('/google', () => {
-//   console.log('i made it to the google route... what the fuck?')
-// })
 
 router.get(
   '/google',
@@ -148,8 +145,12 @@ router.get('/authenticated', (req, res) => {
       user: req.user,
     })
   } else {
-    res.status(404).json({})
-    throw new Error('User not found')
+    res.status(404).json({
+      status: 'fail',
+      message: 'could not authenticate user',
+      user: null,
+    })
+    // throw new Error('User not found')
   }
 })
 

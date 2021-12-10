@@ -19,6 +19,8 @@ import parentRouter from './routes/parentRouter.js'
 import studentRouter from './routes/studentRouter.js'
 
 import passportConfig from './config/passport.js'
+import AppError from './utils/appError.js'
+import globalErrorHandler from './controllers/errorController.js'
 
 const __dirname = path.resolve()
 
@@ -87,6 +89,11 @@ app.use('/api/v1/users', userRouter)
 app.use('/api/v1/teachers', teacherRouter)
 app.use('/api/v1/parents', parentRouter)
 app.use('/api/v1/students', studentRouter)
+// app.all('*', (req, res, next) => {
+//   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))
+// })
+
+app.use(globalErrorHandler)
 
 const httpServer = createServer()
 const io = new Server(httpServer, {

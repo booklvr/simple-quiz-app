@@ -62,7 +62,7 @@ export const checkForExistingAccount = catchAsync(async (req, res, next) => {
 
 export const logout = (req, res) => {
   req.logout()
-  // res.locals.user = ''
+  res.locals.user = ''
 
   res.status(200).json({
     status: 'success',

@@ -1,25 +1,58 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import Loader from '../../components/Loader'
+import useVerifyLoggedInUser from '../../hooks/useVerifyLoggedInUser'
 
-// import { newGoogleUser } from '../../actions/newUserActions'
-// import { userInfo } from '../../actions/userActions'
+import {
+  TeacherDashboardBannerContainer,
+  TeacherDashboardContentContainer,
+  TeacherDashboardNavigation,
+  TeacherDashboardNavigationButton,
+  TeacherDashboardWelcomeMessage,
+  TeacherHomeContainer,
+} from './styled'
 
-import { TeacherHomeContainer } from './styled'
+// components
+import TeacherDashboardClassrooms from '../../components/TeacherDashboardClassrooms'
 
 const TeacherHome = () => {
-  const dispatch = useDispatch()
+  // useVerifyLoggedInUser()
+  // ------------------------
+  // wait for the registerWithEmail flag to complete
+  // make a request to the backend to verify the user
+  // add user to user state
+  // if error re route to login or other logged in account page
+  const { user, loading, error, message } = useVerifyLoggedInUser()
+  // ---------------------------------------------------------------
 
-  // useEffect(() => {
-  //   // dispatch(newGoogleUser())
-  // }, [dispatch])
-
-  // const checkUserInfo = () => {
-  //   dispatch(userInfo())
-  // }
+  const [currentTab, setCurrentTab] = useState('classrooms')
 
   return (
     <TeacherHomeContainer>
-      welcome to the teacher home page
+      {(loading && <Loader></Loader>) || (
+        <>
+          <TeacherDashboardBannerContainer>
+            <TeacherDashboardWelcomeMessage>
+              Welcome, {user.displayName}
+            </TeacherDashboardWelcomeMessage>
+          </TeacherDashboardBannerContainer>
+          <TeacherDashboardNavigation>
+            <TeacherDashboardNavigationButton
+              onClick={() => setCurrentTab('classrooms')}
+            >
+              Classroom
+            </TeacherDashboardNavigationButton>
+            <TeacherDashboardNavigationButton
+              onClick={() => setCurrentTab('students')}
+            >
+              Student
+            </TeacherDashboardNavigationButton>
+          </TeacherDashboardNavigation>
+          <TeacherDashboardContentContainer>
+            {(currentTab === 'classrooms' && <TeacherDashboardClassrooms />) ||
+              (currentTab === 'students' && <div>students</div>)}
+          </TeacherDashboardContentContainer>
+        </>
+      )}
     </TeacherHomeContainer>
   )
 }

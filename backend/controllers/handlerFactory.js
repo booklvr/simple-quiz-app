@@ -1,6 +1,69 @@
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import APIFeatures from '../utils/apiFeatures.js'
+import passport from 'passport'
+
+export const registerFactory = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const { email, password, givenName, familyName, accountType, ...rest } =
+      req.body
+
+    const newUserData = {
+      accountType,
+      givenName,
+      familyName,
+      email,
+      password,
+      displayName: `${givenName} ${familyName}`,
+    }
+
+    if (accountType === 'student') {
+      // Object.assign(newUserData, { ...rest })
+      Object.assign(
+        newUserData,
+        { dateOfBirth: 'nov 20 1988' },
+        { classroomID: 1234568 }
+      )
+    }
+
+    const user = await new Model(newUserData)
+
+    Model.register(user, password, async (err) => {
+      if (err) {
+        console.log(err)
+
+        return next(new AppError(err.message, 500))
+      }
+
+      // return to frontend newUserAction
+      /*
+        {
+          status: 'success',
+          message: *accountType* registered successfully
+          user: {
+            accountType,
+            givenName,
+            familyName,
+            displayName,
+            email,
+            newUser: true,
+            hash,
+            salt,
+            createdAt,
+            updatedAt,
+          }
+        }
+      */
+      passport.authenticate(`${accountType}Local`)(req, res, () => {
+        console.log('trying to authenticate user through email')
+        res.status(200).json({
+          status: 'success',
+          message: `${accountType} registered successfully`,
+          user: req.user,
+        })
+      })
+    })
+  })
 
 export const getAllFactory = (Model) =>
   catchAsync(async (req, res, next) => {

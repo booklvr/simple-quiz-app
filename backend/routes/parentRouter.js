@@ -2,6 +2,7 @@ import express from 'express'
 import {
   getAuthenticatedUserFactory,
   getOneFactory,
+  registerFactory,
 } from '../controllers/handlerFactory.js'
 // import passport from 'passport'
 import { isAuthenticated } from '../middleware/authMiddleware.js'
@@ -17,6 +18,7 @@ const router = express.Router()
 router
   .route('/')
   .get(isAuthenticated, isParent, getAuthenticatedUserFactory(Parent))
+  .post(registerFactory(Parent))
 
 // router.post('/', isLoggedIn, register);
 

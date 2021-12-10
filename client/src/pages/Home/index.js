@@ -6,8 +6,8 @@ const Home = () => {
   return (
     <HomeContainer>
       Welcome to nicks teaching website
-      <LoginLink to='/login'>Login</LoginLink>
-  </HomeContainer>
+      <LoginLink to='/choose-account'>Start</LoginLink>
+    </HomeContainer>
   )
 }
 

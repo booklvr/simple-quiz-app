@@ -1,9 +1,10 @@
 import express from 'express'
+
 import {
   getAuthenticatedUserFactory,
   getOneFactory,
+  registerFactory,
 } from '../controllers/handlerFactory.js'
-// import passport from 'passport'
 import { isAuthenticated } from '../middleware/authMiddleware.js'
 import { isStudent } from '../middleware/studentMiddleware.js'
 import Student from '../models/StudentModel.js'
@@ -17,6 +18,7 @@ const router = express.Router()
 router
   .route('/')
   .get(isAuthenticated, isStudent, getAuthenticatedUserFactory(Student))
+  .post(registerFactory(Student))
 
 // router.post('/', isLoggedIn, register);
 

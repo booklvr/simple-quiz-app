@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export const RegisterPageContainer = styled.div`
   display: flex;
-  height: calc(100vh - var(--navbar-height));
+  /* height: calc(100vh - var(--navbar-height)); */
   background-color: var(--purple);
   width: 100vw;
   display: flex;
@@ -12,16 +12,30 @@ export const RegisterPageContainer = styled.div`
   align-items: center;
 `
 
+export const AccountTypesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+`
+
+export const AccountTypesMessage = styled.p`
+  font-size: 28px;
+  align-self: flex-start;
+`
+
 export const AccountTypeButtonContainer = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
+  justify-content: stretch;
+  margin-bottom: 2rem;
 `
 
 export const AccountTypeButton = styled.button`
-  padding: 2rem;
-  font-size: 2rem;
-  margin: 1rem;
+  padding: 1rem;
+  font-size: 28px;
+  background-color: ${({ current }) => (current ? 'red' : 'revert')};
 `
 
 export const RegisterFormContainer = styled.div`
@@ -36,17 +50,11 @@ export const HeaderContainer = styled.div``
 
 export const RegisterH1 = styled.h1`
   font-size: 30px;
-  color: pink;
-`
-
-export const RegisterH2 = styled.h2`
-  font-size: 20px;
 `
 
 export const RegisterLinksContainer = styled.div`
   /* display: flex;
   flex-direction: column; */
-  background-color: pink;
   width: 100%;
 `
 
@@ -60,6 +68,14 @@ export const RegisterLink = styled.a`
 
 export const GoogleRegisterLink = styled(RegisterLink)`
   background-color: var(--google);
+  margin-bottom: 1rem;
+`
+
+export const EmailRegisterLink = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: space-between;
+  width: 100%;
 `
 
 export const RegisterLinkIcon = styled.img`
@@ -77,12 +93,6 @@ export const RegisterLinkText = styled.div`
   padding-left: 10px;
 `
 
-export const OrOption = styled.div`
-  font-size: 15px;
-  margin: 10px 0;
-  text-align: center;
-`
-
 export const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -94,6 +104,7 @@ export const RegisterLabel = styled.label``
 export const RegisterInput = styled.input``
 
 export const Login = styled(Link)`
+  margin-top: 2rem;
   text-decoration: none;
   cursor: pointer;
 `

@@ -14,6 +14,12 @@ const TeacherSchema = new mongoose.Schema(
       type: String,
       select: false,
     },
+    familyName: {
+      type: String,
+    },
+    givenName: {
+      type: String,
+    },
     displayName: {
       type: String,
     },
@@ -64,6 +70,7 @@ TeacherSchema.methods.createPasswordResetToken = function () {
   return resetToken
 }
 
+
 TeacherSchema.virtual('classrooms', {
   ref: 'Classroom',
   localField: '_id',
@@ -71,19 +78,16 @@ TeacherSchema.virtual('classrooms', {
 })
 
 TeacherSchema.post('findOneAndDelete', async function (user) {
-  console.log('user', user)
 
   if (user) {
     const classrooms = await Classroom.find({ owner: user._id })
 
-    console.log('classrooms', classrooms)
 
     await Promise.all(
       classrooms.map(async (classroom) => {
         const deletedClassroom = await Classroom.findByIdAndDelete(
           classroom._id
         )
-        console.log('deletedClassroom', deletedClassroom)
       })
     )
   }

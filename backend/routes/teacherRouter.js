@@ -2,6 +2,7 @@ import express from 'express'
 import {
   getAuthenticatedUserFactory,
   getOneFactory,
+  registerFactory,
 } from '../controllers/handlerFactory.js'
 // import passport from 'passport'
 import { isAuthenticated } from '../middleware/authMiddleware.js'
@@ -17,12 +18,12 @@ const router = express.Router()
 router
   .route('/')
   .get(isAuthenticated, isTeacher, getAuthenticatedUserFactory(Teacher))
+  .post(registerFactory(Teacher))
+
 
 // router.post('/', isLoggedIn, register);
 
-// router.route('/google').post(registerFromGoogle)
 
-// router.route('/deleteAllModels').get(deleteAllModels)
 
 // router.use(isAuthenticated, getUserId)
 
