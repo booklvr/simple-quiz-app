@@ -45,3 +45,21 @@ export const EmailRegisterFormInputError = styled.p`
   padding: 0;
   /* background-color: pink; */
 `
+
+export const InviteCodeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+
+export const InviteCodeButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const InviteCodeSkipButton = styled.button``
+
+export const InviteCodeNextButton = styled.button``

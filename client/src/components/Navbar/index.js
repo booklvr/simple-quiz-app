@@ -48,9 +48,9 @@ const Navbar = () => {
           <button onClick={() => getCurrentUser()}>check user</button>
 
           {(loading && <Loader />) ||
-            (!user && <button onClick={() => handleLogin()}>Login</button>) || (
-              <button onClick={() => handleLogout()}>Logout</button>
-            )}
+            ((!user || user === {}) && (
+              <button onClick={() => handleLogin()}>Login</button>
+            )) || <button onClick={() => handleLogout()}>Logout</button>}
         </NavbarContainer>
       </Nav>
     </>

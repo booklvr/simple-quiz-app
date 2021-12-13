@@ -12,6 +12,7 @@ import {
   VERIFY_LOGGED_IN_USER_REQUEST,
   VERIFY_LOGGED_IN_USER_SUCCESS,
 } from '../constants/userConstants'
+import { addMessage } from './utils'
 
 export const userInfo = () => async (dispatch) => {
   try {
@@ -78,19 +79,21 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
       payload: data.user,
     })
 
-    // create message
-    const messageId = uuid()
-    dispatch({
-      type: ADD_MESSAGE,
-      payload: { message: data.message, id: messageId },
-    })
+    addMessage(dispatch, data.message)
 
-    setTimeout(() => {
-      dispatch({
-        type: REMOVE_MESSAGE,
-        payload: messageId,
-      })
-    }, 2000)
+    // // create message
+    // const messageId = uuid()
+    // dispatch({
+    //   type: ADD_MESSAGE,
+    //   payload: { message: data.message, id: messageId },
+    // })
+
+    // setTimeout(() => {
+    //   dispatch({
+    //     type: REMOVE_MESSAGE,
+    //     payload: messageId,
+    //   })
+    // }, 2000)
   } catch (error) {
     // console.log('in the catch block for errors in user actions login')
     // console.log('error', error.response.data)
@@ -99,7 +102,6 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message
-        
 
     console.log('returnError', returnError)
     // I have no idea what the error message is imbedded so deep? I need to check that out.

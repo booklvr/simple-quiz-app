@@ -8,6 +8,7 @@ import {
   REGISTER_WITH_EMAIL_SUCCESS,
   SET_ACCOUNT_TYPE,
 } from '../constants/newUserConstants'
+import { addMessage } from './utils'
 
 export const setAccountType = (type) => (dispatch) => {
   dispatch({ type: SET_ACCOUNT_TYPE, payload: type })
@@ -28,8 +29,8 @@ export const registerWithEmail =
 
     // add date of birth and classroom code if student
     if (accountType === 'student') {
-      const { dateOfBirth, classroomCode } = rest
-      Object.assign(dataPacket, { dateOfBirth }, { classroomCode })
+      const { dateOfBirth, inviteCode } = rest
+      Object.assign(dataPacket, { dateOfBirth }, { inviteCode })
     }
     console.log('dataPacket', dataPacket)
 
@@ -56,6 +57,8 @@ export const registerWithEmail =
         type: REGISTER_WITH_EMAIL_SUCCESS,
         payload: data.user,
       })
+
+      addMessage(dispatch, data.message)
 
       // dispatch({
       //   type: USER_LOGIN,
@@ -90,12 +93,11 @@ export const checkForExistingEmail = (email) => async (dispatch) => {
     console.log(data)
 
     dispatch({
-      type: CHECK_FOR_EXISTING_EMAIL_SUCCESS
+      type: CHECK_FOR_EXISTING_EMAIL_SUCCESS,
     })
-
   } catch (error) {
     dispatch({
-      type: CHECK_FOR_EXISTING_EMAIL_FAIL
+      type: CHECK_FOR_EXISTING_EMAIL_FAIL,
     })
   }
 }

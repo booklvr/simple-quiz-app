@@ -23,6 +23,16 @@ import {
 import { messagesReducer } from './reducers/messagesReducer'
 // ----------------------------------------------------------
 
+// classroomReducers
+import {
+  addClassroomReducer,
+  getAllCurrentTeacherClassroomsReducer,
+  getClassroomReducer,
+  verifyInviteCodeReducer,
+} from './reducers/classroomReducer'
+// ----------------------------------------------------------
+
+// combine reducers
 const reducer = combineReducers({
   //reducers
   newUser: newUserReducer,
@@ -33,7 +43,12 @@ const reducer = combineReducers({
   verifyLoggedInUser: verifyLoggedInUserReducer,
   loginWithEmail: loginWithEmailReducer,
   messages: messagesReducer,
+  addClassroom: addClassroomReducer,
+  getAllCurrentTeacherClassrooms: getAllCurrentTeacherClassroomsReducer,
+  verifyInviteCode: verifyInviteCodeReducer,
+  getClassroom: getClassroomReducer,
 })
+// ----------------------------------------------------------
 
 // from local storage
 const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -43,6 +58,7 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
 const initialState = {
   user: { ...userInfoFromStorage },
 }
+// ----------------------------------------------------------
 
 const middleware = [thunk]
 

@@ -10,6 +10,7 @@ import TeacherHome from './pages/TeacherHome'
 import Login from './pages/Login'
 import ParentHome from './pages/ParentHome'
 import Message from './components/Message'
+import Classroom from './pages/Classroom'
 // import TeacherProtectedRoute from './components/TeacherProtectedRoute'
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route exact path='/login' component={Login} />
         <Route exact path='/choose-account' component={ChooseAccountType} />
         <Route exact path='/teacher' component={TeacherHome} />
+        <Route exact path='/teacher/classroom/:slug' component={Classroom} />
         <Route exact path='/student' component={StudentHome} />
         <Route exact path='/parent' component={ParentHome} />
       </Switch>

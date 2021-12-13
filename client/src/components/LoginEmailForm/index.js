@@ -1,7 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message'
 import React from 'react'
 import { useEffect } from 'react'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
@@ -20,35 +19,25 @@ import {
   EmailLoginFormSubmitButton,
 } from './styled'
 
+let renderCount = 0
+
 const LoginEmailForm = ({ setLoginWithEmail }) => {
   const dispatch = useDispatch()
   const history = useHistory()
+  renderCount++
 
   const {
     register,
     handleSubmit,
-    reset,
-    watch,
     setError,
     clearErrors,
-    getValues,
-    formState,
-    formState: {
-      errors: formErrors,
-      isDirty,
-      dirtyFields,
-      isSubmitting,
-      touchedFields,
-      isValid,
-      isSubmitSuccessful,
-      submitCount,
-    },
+    formState: { errors: formErrors, submitCount },
   } = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
-    criteriaMode: 'all',
+    // criteriaMode: 'all',
   })
 
   const { loading, error } = useSelector((state) => state.loginWithEmail)
@@ -77,24 +66,24 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
     // }
   }
 
-  useEffect(() => {
-    if (!error) {
-      clearErrors('apiError')
-    }
-    if (error) {
-      if (error === 'Request failed with status code 401') {
-        setError('apiError', {
-          type: 'SERVER',
-          message: 'email and password do not match',
-        })
-      } else {
-        setError('apiError', {
-          type: 'SERVER',
-          message: error,
-        })
-      }
-    }
-  }, [error, loading, setError, clearErrors])
+  // useEffect(() => {
+  //   if (!error) {
+  //     clearErrors('apiError')
+  //   }
+  //   if (error) {
+  //     if (error === 'Request failed with status code 401') {
+  //       setError('apiError', {
+  //         type: 'SERVER',
+  //         message: 'email and password do not match',
+  //       })
+  //     } else {
+  //       setError('apiError', {
+  //         type: 'SERVER',
+  //         message: error,
+  //       })
+  //     }
+  //   }
+  // }, [error, loading, setError, clearErrors])
 
   const onError = (err) => {
     console.log('onError -> err:', err)
@@ -113,6 +102,7 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
       {(loading && <Loader />) || (
         <form onSubmit={handleSubmit(onSubmit, onError)}>
           <p>submit count: {submitCount}</p>
+          <p>render count: {renderCount}</p>
           <EmailLoginFormGroup>
             <EmailLoginFormLabel>Email</EmailLoginFormLabel>
             <EmailLoginFormInput
@@ -123,10 +113,10 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
                   message: 'you must provide a valid email',
                 },
               })}
-              onChange={(e) => {
-                console.log('onChange event - email')
-                clearErrors('apiError')
-              }}
+              // onChange={(e) => {
+              //   console.log('onChange event - email')
+              //   clearErrors('apiError')
+              // }}
             ></EmailLoginFormInput>
             <ErrorMessage
               errors={formErrors}
@@ -142,10 +132,10 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
               {...register('password', {
                 required: 'password is required',
               })}
-              onChange={(e) => {
-                console.log('onChange event - password')
-                clearErrors('apiError')
-              }}
+              // onChange={(e) => {
+              //   console.log('onChange event - password')
+              //   clearErrors('apiError')
+              // }}
             ></EmailLoginFormInput>
             <ErrorMessage
               errors={formErrors}
@@ -161,13 +151,9 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
           >
             Submit
           </EmailLoginFormSubmitButton>
-          <ErrorMessage
-            errors={formErrors}
-            name='apiError'
-            render={({ message }) => (
-              <EmailLoginFormInputError>{message}</EmailLoginFormInputError>
-            )}
-          />
+          {error && (
+            <EmailLoginFormInputError>{error}</EmailLoginFormInputError>
+          )}
         </form>
       )}
       <BackButton onClick={() => setLoginWithEmail(false)}>Back</BackButton>

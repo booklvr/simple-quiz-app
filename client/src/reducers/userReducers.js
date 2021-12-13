@@ -1,4 +1,7 @@
-import { REGISTER_WITH_EMAIL_SUCCESS } from '../constants/newUserConstants'
+import {
+  REGISTER_WITH_EMAIL_SUCCESS,
+  SET_ACCOUNT_TYPE,
+} from '../constants/newUserConstants'
 import {
   LOGIN_WITH_EMAIL_FAILURE,
   LOGIN_WITH_EMAIL_REQUEST,
@@ -28,6 +31,8 @@ export const userReducer = (state = {}, action) => {
       return { ...state, ...payload }
     case USER_LOGOUT_SUCCESS:
       return null
+    case SET_ACCOUNT_TYPE:
+      return null
     default:
       return { ...state }
   }
@@ -44,7 +49,7 @@ export const loginWithEmailReducer = (
     case LOGIN_WITH_EMAIL_REQUEST:
       return { ...state, loading: true }
     case LOGIN_WITH_EMAIL_SUCCESS:
-      return { ...state, loading: false }
+      return { ...state, loading: false, error: null }
     case LOGIN_WITH_EMAIL_FAILURE:
       return { ...state, loading: false, error: payload }
     default:

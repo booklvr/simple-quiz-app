@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { verifyLoggedInUser } from '../actions/userActions'
 
-const useVerifyLoggedInUser = () => {
+const useVerifyLoggedInUser = (accountType) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -36,15 +36,16 @@ const useVerifyLoggedInUser = () => {
     if verification has completed, and user is not found the re-route to login or to appropriate account type dashboard 
   */
   useEffect(() => {
+    console.log('in this useEffect')
     if (verified) {
       if (!user) {
         history.push('/login')
       }
-      if (user && user.accountType !== 'teacher') {
+      if (user && user.accountType !== accountType) {
         history.push(`/${user.accountType}`)
       }
     }
-  }, [user, history, verified])
+  }, [user, history, verified, accountType])
 
   return {
     user,

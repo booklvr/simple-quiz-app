@@ -54,3 +54,9 @@ export const AddClassroomFormLabel = styled.label``
 export const AddClassroomFormSubmitButton = styled.button`
   padding: 0.5rem;
 `
+
+export const AddClassroomFormInputError = styled.p`
+  color: red;
+  margin: 0;
+  padding: 0;
+`

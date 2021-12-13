@@ -3,7 +3,7 @@ import styled from 'styled-components/macro'
 export const LoginPageContainer = styled.div`
   display: flex;
   height: calc(100vh - var(--navbar-height));
-  background-color: var(--purple);
+  background-color: lightgrey;
   width: 100vw;
   display: flex;
   flex-direction: column;

@@ -16,39 +16,42 @@ import {
   EmailRegisterFormInputError,
   EmailRegisterFormLabel,
   EmailRegisterFormSubmitButton,
+  InviteCodeButtonsContainer,
+  InviteCodeContainer,
+  InviteCodeNextButton,
+  InviteCodeSkipButton,
   TestPage,
   UseFormHookContainer,
 } from './styled'
 
 // components
 import Loader from '../Loader'
+import { verifyCheckInviteCode } from '../../actions/classroomActions'
+let renderCount = 0
 
 const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
+  renderCount++
   const dispatch = useDispatch()
   const history = useHistory()
 
   const { loading, error } = useSelector((state) => state.registerWithEmail)
-  let render = 0
-  render++
+  const {
+    loading: loadingVerifiedInviteCode,
+    error: errorVerifiedInviteCode,
+    verified,
+  } = useSelector((state) => state.verifyInviteCode)
+
+  const [checkInviteCode, setCheckInviteCode] = useState(true)
+  const [inviteCode, setInviteCode] = useState('')
 
   const {
     register,
     handleSubmit,
-    reset,
     watch,
     setError,
     clearErrors,
     getValues,
-    formState,
-    formState: {
-      errors: formErrors,
-      isDirty,
-      dirtyFields,
-      isSubmitting,
-      touchedFields,
-      isValid,
-      isSubmitSuccessful,
-    },
+    formState: { errors: formErrors },
   } = useForm({
     defaultValues: {
       familyName: '',
@@ -56,20 +59,13 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
       email: '',
       password: '',
     },
-    criteriaMode: 'all',
+    // criteriaMode: 'all',
   })
 
   const onSubmit = (data) => {
     console.log(data)
 
-    const {
-      givenName,
-      familyName,
-      email,
-      password,
-      classroomCode,
-      dateOfBirth,
-    } = data
+    const { givenName, familyName, email, password, dateOfBirth } = data
 
     console.log('on submit data:', data)
 
@@ -81,7 +77,7 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
           email,
           password,
           accountType,
-          classroomCode,
+          inviteCode: inviteCode,
           dateOfBirth,
         })
       )
@@ -99,11 +95,11 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
     history.push(`/${accountType}`)
   }
 
-  console.log(watch())
+  // console.log(watch())
 
-  const onError = (err) => {
-    console.log('onError -> err:', err)
-  }
+  // const onError = (err) => {
+  //   console.log('onError -> err:', err)
+  // }
   // console.log('formErrors', formErrors)
   // console.log('isValid', isValid)
 
@@ -146,117 +142,162 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
       })
       console.log('error', error.response.data)
     }
-
-    // if (email) {
-    // }
-
-    // setTimeout(() => {
-    //   clearErrors('apiErrors')
-    // }, 3000)
   }
 
-    
+  const checkInviteCodeIsValid = () => {
+    if (inviteCode.length === 6) {
+      dispatch(verifyCheckInviteCode(inviteCode))
+    }
+  }
+
+  const handleInviteCodeChange = (e) => {
+    setInviteCode(e.target.value)
+
+    checkInviteCodeIsValid()
+  }
+
+  const handleNext = () => {
+    setCheckInviteCode(false)
+  }
+
+  useEffect(checkInviteCodeIsValid, [inviteCode, dispatch])
 
   return (
     <EmailRegisterFormContainer>
+      <p>renderCount: {renderCount}</p>
       {(loading && <Loader />) || (
-        <form onSubmit={handleSubmit(onSubmit, onError)}>
-          <EmailRegisterFormGroup>
-            <EmailRegisterFormLabel htmlFor='givenName'>
-              First Name
-            </EmailRegisterFormLabel>
-            <EmailRegisterFormInput
-              {...register('givenName', {
-                required: 'this is required',
-              })}
-            ></EmailRegisterFormInput>
-            <ErrorMessage
-              errors={formErrors}
-              name='givenName'
-              render={({ message }) => (
-                <EmailRegisterFormInputError>
-                  {message}
-                </EmailRegisterFormInputError>
-              )}
-            />
-          </EmailRegisterFormGroup>
-          <EmailRegisterFormGroup>
-            <EmailRegisterFormLabel htmlFor='familyName'>
-              Last Name
-            </EmailRegisterFormLabel>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {(accountType === 'student' && checkInviteCode && (
+            <InviteCodeContainer>
+              <EmailRegisterFormGroup>
+                <EmailRegisterFormLabel htmlFor='inviteCode'>
+                  Invite Code:
+                </EmailRegisterFormLabel>
+                <EmailRegisterFormInput
+                  name='inviteCode'
+                  value={inviteCode}
+                  onChange={handleInviteCodeChange}
+                ></EmailRegisterFormInput>
+                <ErrorMessage
+                  errors={formErrors}
+                  name='inviteCode'
+                  render={({ message }) => (
+                    <EmailRegisterFormInputError>
+                      {message}
+                    </EmailRegisterFormInputError>
+                  )}
+                />
+              </EmailRegisterFormGroup>
+              <InviteCodeButtonsContainer>
+                <InviteCodeSkipButton onClick={() => setCheckInviteCode(false)}>
+                  Skip
+                </InviteCodeSkipButton>
+                <InviteCodeNextButton onClick={handleNext}>
+                  Next
+                </InviteCodeNextButton>
+              </InviteCodeButtonsContainer>
+            </InviteCodeContainer>
+          )) || (
+            <div>
+              <EmailRegisterFormGroup>
+                <EmailRegisterFormLabel htmlFor='givenName'>
+                  First Name
+                </EmailRegisterFormLabel>
+                <EmailRegisterFormInput
+                  {...register('givenName', {
+                    required: 'this is required',
+                  })}
+                ></EmailRegisterFormInput>
+                <ErrorMessage
+                  errors={formErrors}
+                  name='givenName'
+                  render={({ message }) => (
+                    <EmailRegisterFormInputError>
+                      {message}
+                    </EmailRegisterFormInputError>
+                  )}
+                />
+              </EmailRegisterFormGroup>
+              <EmailRegisterFormGroup>
+                <EmailRegisterFormLabel htmlFor='familyName'>
+                  Last Name
+                </EmailRegisterFormLabel>
 
-            <EmailRegisterFormInput
-              {...register('familyName', {
-                required: 'this is required',
-                maxLength: 80,
-              })}
-            ></EmailRegisterFormInput>
-            <ErrorMessage
-              errors={formErrors}
-              name='familyName'
-              render={({ message }) => (
-                <EmailRegisterFormInputError>
-                  {message}
-                </EmailRegisterFormInputError>
-              )}
-            />
-          </EmailRegisterFormGroup>
-          <EmailRegisterFormGroup>
-            <EmailRegisterFormLabel htmlFor='email'>
-              Email
-            </EmailRegisterFormLabel>
-            <EmailRegisterFormInput
-              {...register('email', {
-                required: {
-                  value: true,
-                  message: 'email is required',
-                },
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: 'you must provide a valid email',
-                },
-                validate: checkForExistingEmail,
-              })}
-            ></EmailRegisterFormInput>
-            <ErrorMessage
-              errors={formErrors}
-              name='apiErrors'
-              render={({ message }) => (
-                <EmailRegisterFormInputError>
-                  {message}
-                </EmailRegisterFormInputError>
-              )}
-            />
-            <ErrorMessage
-              errors={formErrors}
-              name='email'
-              render={({ message }) => (
-                <EmailRegisterFormInputError>
-                  {message}
-                </EmailRegisterFormInputError>
-              )}
-            />
-          </EmailRegisterFormGroup>
-          <EmailRegisterFormGroup>
-            <EmailRegisterFormLabel htmlForm='password'>
-              Password
-            </EmailRegisterFormLabel>
-            <EmailRegisterFormInput
-              {...register('password', { required: 'password is required' })}
-            ></EmailRegisterFormInput>
-            <ErrorMessage
-              errors={formErrors}
-              name='password'
-              render={({ message }) => (
-                <EmailRegisterFormInputError>
-                  {message}
-                </EmailRegisterFormInputError>
-              )}
-            />
-          </EmailRegisterFormGroup>
-          <EmailRegisterFormSubmitButton type='submit'>
-            Submit
-          </EmailRegisterFormSubmitButton>
+                <EmailRegisterFormInput
+                  {...register('familyName', {
+                    required: 'this is required',
+                  })}
+                ></EmailRegisterFormInput>
+                <ErrorMessage
+                  errors={formErrors}
+                  name='familyName'
+                  render={({ message }) => (
+                    <EmailRegisterFormInputError>
+                      {message}
+                    </EmailRegisterFormInputError>
+                  )}
+                />
+              </EmailRegisterFormGroup>
+              <EmailRegisterFormGroup>
+                <EmailRegisterFormLabel htmlFor='email'>
+                  Email
+                </EmailRegisterFormLabel>
+                <EmailRegisterFormInput
+                  {...register('email', {
+                    required: {
+                      value: true,
+                      message: 'email is required',
+                    },
+                    pattern: {
+                      value: /^\S+@\S+$/i,
+                      message: 'you must provide a valid email',
+                    },
+                    validate: checkForExistingEmail,
+                  })}
+                ></EmailRegisterFormInput>
+                <ErrorMessage
+                  errors={formErrors}
+                  name='apiErrors'
+                  render={({ message }) => (
+                    <EmailRegisterFormInputError>
+                      {message}
+                    </EmailRegisterFormInputError>
+                  )}
+                />
+                <ErrorMessage
+                  errors={formErrors}
+                  name='email'
+                  render={({ message }) => (
+                    <EmailRegisterFormInputError>
+                      {message}
+                    </EmailRegisterFormInputError>
+                  )}
+                />
+              </EmailRegisterFormGroup>
+              <EmailRegisterFormGroup>
+                <EmailRegisterFormLabel htmlForm='password'>
+                  Password
+                </EmailRegisterFormLabel>
+                <EmailRegisterFormInput
+                  {...register('password', {
+                    required: 'password is required',
+                  })}
+                ></EmailRegisterFormInput>
+                <ErrorMessage
+                  errors={formErrors}
+                  name='password'
+                  render={({ message }) => (
+                    <EmailRegisterFormInputError>
+                      {message}
+                    </EmailRegisterFormInputError>
+                  )}
+                />
+              </EmailRegisterFormGroup>
+              <EmailRegisterFormSubmitButton type='submit'>
+                Submit
+              </EmailRegisterFormSubmitButton>
+            </div>
+          )}
         </form>
       )}
       <BackButton onClick={() => setRegisterWithEmail(false)}>Back</BackButton>

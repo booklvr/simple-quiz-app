@@ -80,11 +80,11 @@ const Register = ({ match }) => {
               href={`http://localhost:8000/api/v1/auth/google/${accountType}`}
             >
               <RegisterLinkIcon src={googleIcon} />
-              <RegisterLinkText>Sign In With Google</RegisterLinkText>
+              <RegisterLinkText>Register With Google</RegisterLinkText>
             </GoogleRegisterLink>
             <EmailRegisterLink onClick={() => setRegisterWithEmail(true)}>
               <FaEnvelope></FaEnvelope>
-              <RegisterLinkText>Sign in with your email</RegisterLinkText>
+              <RegisterLinkText>Register with your email</RegisterLinkText>
             </EmailRegisterLink>
           </RegisterLinksContainer>
         )}
