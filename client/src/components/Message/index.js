@@ -6,7 +6,6 @@ import { MessageContainer, MessageText } from './style'
 const Message = () => {
   const messages = useSelector((state) => state.messages)
 
-  console.log('messages', messages)
 
   return (
     <MessageContainer>

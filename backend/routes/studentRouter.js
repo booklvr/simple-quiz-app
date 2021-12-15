@@ -1,4 +1,5 @@
 import express from 'express'
+import { getClassroomIdFromInviteCode } from '../controllers/classroomController.js'
 
 import {
   getAuthenticatedUserFactory,

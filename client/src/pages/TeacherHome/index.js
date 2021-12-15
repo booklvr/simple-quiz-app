@@ -13,6 +13,7 @@ import {
 
 // components
 import TeacherDashboardClassrooms from '../../components/TeacherDashboardClassrooms'
+import TeacherDashboardStudents from '../../components/TeacherDashboardStudents'
 
 const TeacherHome = () => {
   // useVerifyLoggedInUser()
@@ -21,14 +22,18 @@ const TeacherHome = () => {
   // make a request to the backend to verify the user
   // add user to user state
   // if error re route to login or other logged in account page
-  const { user, loading, error, message } = useVerifyLoggedInUser()
+  const { user, loading, error } = useVerifyLoggedInUser()
   // ---------------------------------------------------------------
 
   const [currentTab, setCurrentTab] = useState('classrooms')
 
   return (
     <TeacherHomeContainer>
-      {(loading && <Loader></Loader>) || (
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
         <>
           <TeacherDashboardBannerContainer>
             <TeacherDashboardWelcomeMessage>
@@ -49,7 +54,7 @@ const TeacherHome = () => {
           </TeacherDashboardNavigation>
           <TeacherDashboardContentContainer>
             {(currentTab === 'classrooms' && <TeacherDashboardClassrooms />) ||
-              (currentTab === 'students' && <div>students</div>)}
+              (currentTab === 'students' && <TeacherDashboardStudents />)}
           </TeacherDashboardContentContainer>
         </>
       )}

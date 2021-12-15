@@ -45,52 +45,11 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
 
   const onSubmit = (data) => {
     clearErrors('apiError')
-    console.log('submitting data:', data)
     const { email, password } = data
-    console.log('email', email)
-    console.log('password:', password)
     dispatch(loginWithEmail(email, password))
-
-    // if (error) {
-    //   if (error === 'Request failed with status code 401') {
-    //     setError('apiError', {
-    //       type: 'SERVER',
-    //       message: 'email and password do not match',
-    //     })
-    //   } else {
-    //     setError('apiError', {
-    //       type: 'SERVER',
-    //       message: error,
-    //     })
-    //   }
-    // }
-  }
-
-  // useEffect(() => {
-  //   if (!error) {
-  //     clearErrors('apiError')
-  //   }
-  //   if (error) {
-  //     if (error === 'Request failed with status code 401') {
-  //       setError('apiError', {
-  //         type: 'SERVER',
-  //         message: 'email and password do not match',
-  //       })
-  //     } else {
-  //       setError('apiError', {
-  //         type: 'SERVER',
-  //         message: error,
-  //       })
-  //     }
-  //   }
-  // }, [error, loading, setError, clearErrors])
-
-  const onError = (err) => {
-    console.log('onError -> err:', err)
   }
 
   useEffect(() => {
-    // console.log('login form useEffect - user', user)
     if (user && user.accountType) {
       console.log('redirecting to homepage after login')
       history.push(`/${user.accountType}`)
@@ -100,7 +59,7 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
   return (
     <EmailLoginFormContainer>
       {(loading && <Loader />) || (
-        <form onSubmit={handleSubmit(onSubmit, onError)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <p>submit count: {submitCount}</p>
           <p>render count: {renderCount}</p>
           <EmailLoginFormGroup>
@@ -113,10 +72,6 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
                   message: 'you must provide a valid email',
                 },
               })}
-              // onChange={(e) => {
-              //   console.log('onChange event - email')
-              //   clearErrors('apiError')
-              // }}
             ></EmailLoginFormInput>
             <ErrorMessage
               errors={formErrors}
@@ -132,10 +87,6 @@ const LoginEmailForm = ({ setLoginWithEmail }) => {
               {...register('password', {
                 required: 'password is required',
               })}
-              // onChange={(e) => {
-              //   console.log('onChange event - password')
-              //   clearErrors('apiError')
-              // }}
             ></EmailLoginFormInput>
             <ErrorMessage
               errors={formErrors}

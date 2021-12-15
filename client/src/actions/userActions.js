@@ -14,15 +14,13 @@ import {
 } from '../constants/userConstants'
 import { addMessage } from './utils'
 
-export const userInfo = () => async (dispatch) => {
-  try {
-    const { data } = await axios.get('/api/v1/auth/google/authenticated')
+// export const userInfo = () => async (dispatch) => {
+//   try {
+//     const { data } = await axios.get('/api/v1/auth/google/authenticated')
 
-    console.log(data)
-  } catch (err) {
-    console.log(err)
-  }
-}
+//   } catch (err) {
+//   }
+// }
 
 export const verifyLoggedInUser = () => async (dispatch) => {
   try {
@@ -38,7 +36,6 @@ export const verifyLoggedInUser = () => async (dispatch) => {
     })
     localStorage.setItem('userInfo', JSON.stringify(data.user))
   } catch (error) {
-    console.log('error', error)
     dispatch({
       type: VERIFY_LOGGED_IN_USER_FAIL,
       payload: error,
@@ -47,9 +44,6 @@ export const verifyLoggedInUser = () => async (dispatch) => {
 }
 
 export const loginWithEmail = (email, password) => async (dispatch) => {
-  console.log('user actions login')
-  console.log('email', email)
-  console.log('password', password)
   try {
     dispatch({
       type: LOGIN_WITH_EMAIL_REQUEST,
@@ -68,11 +62,9 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
       password,
     }
 
-    console.log('dataPacket', dataPacket)
 
     const { data } = await axios.post(URL, dataPacket, config)
 
-    console.log('user login data', data)
 
     dispatch({
       type: LOGIN_WITH_EMAIL_SUCCESS,
@@ -80,31 +72,12 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
     })
 
     addMessage(dispatch, data.message)
-
-    // // create message
-    // const messageId = uuid()
-    // dispatch({
-    //   type: ADD_MESSAGE,
-    //   payload: { message: data.message, id: messageId },
-    // })
-
-    // setTimeout(() => {
-    //   dispatch({
-    //     type: REMOVE_MESSAGE,
-    //     payload: messageId,
-    //   })
-    // }, 2000)
   } catch (error) {
-    // console.log('in the catch block for errors in user actions login')
-    // console.log('error', error.response.data)
-
     const returnError =
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message
 
-    console.log('returnError', returnError)
-    // I have no idea what the error message is imbedded so deep? I need to check that out.
     dispatch({
       type: LOGIN_WITH_EMAIL_FAILURE,
       payload: returnError,
@@ -118,9 +91,7 @@ export const logout = () => async (dispatch) => {
       type: USER_LOGOUT_REQUEST,
     })
 
-    const { data } = await axios.get('/api/v1/auth/logout')
-
-    console.log('logout data', data)
+    await axios.get('/api/v1/auth/logout')
 
     dispatch({
       type: USER_LOGOUT_SUCCESS,

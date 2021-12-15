@@ -17,6 +17,7 @@ import authRouter from './routes/authRouter.js'
 import teacherRouter from './routes/teacherRouter.js'
 import parentRouter from './routes/parentRouter.js'
 import studentRouter from './routes/studentRouter.js'
+import classroomRouter from './routes/classroomRouter.js'
 
 import passportConfig from './config/passport.js'
 import AppError from './utils/appError.js'
@@ -89,6 +90,7 @@ app.use('/api/v1/users', userRouter)
 app.use('/api/v1/teachers', teacherRouter)
 app.use('/api/v1/parents', parentRouter)
 app.use('/api/v1/students', studentRouter)
+app.use('/api/v1/classrooms', classroomRouter)
 // app.all('*', (req, res, next) => {
 //   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404))
 // })

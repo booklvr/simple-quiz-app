@@ -40,29 +40,6 @@ const ChooseAccountType = () => {
   )
 }
 
-//   return (
-//     <GoogleChooseAccountTypeContainer>
-//       {loading ? (
-//         <Loader />
-//       ) : (
-//         <AccountTypeButtonsContainer>
-//           <AccountTypeButton
-//             to='/teacher/'
-//             onClick={() => sendAccountType('teacher')}
-//           >
-//             Teacher
-//           </AccountTypeButton>
-//           <AccountTypeButton
-//             to='/student/'
-//             onClick={() => sendAccountType('student')}
-//           >
-//             Student
-//           </AccountTypeButton>
-//         </AccountTypeButtonsContainer>
-//       )}
-//       <button onClick={() => checkUserInfo()}>check if authenticated</button>
-//     </GoogleChooseAccountTypeContainer>
-//   )
-// }
+
 
 export default ChooseAccountType

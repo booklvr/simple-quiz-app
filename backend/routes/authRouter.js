@@ -7,6 +7,7 @@ import {
   logout,
 } from '../controllers/authController.js'
 import { verifyLoggedInUser } from '../controllers/userController.js'
+import AppError from '../utils/appError.js'
 
 const router = express.Router()
 // @desc Auth with Google
@@ -137,7 +138,7 @@ router.get(
   }
 )
 
-router.get('/authenticated', (req, res) => {
+router.get('/authenticated', (req, res, next) => {
   if (req.isAuthenticated()) {
     res.status(200).json({
       status: 'success',
@@ -145,11 +146,12 @@ router.get('/authenticated', (req, res) => {
       user: req.user,
     })
   } else {
-    res.status(404).json({
-      status: 'fail',
-      message: 'could not authenticate user',
-      user: null,
-    })
+    return next(new AppError('could not authenticate user', 404))
+    // res.status(404).json({
+    //   status: 'fail',
+    //   message: 'could not authenticate user',
+    //   user: null,
+    // })
     // throw new Error('User not found')
   }
 })

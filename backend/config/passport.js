@@ -236,20 +236,16 @@ const passportConfig = (passport) => {
 
   passport.deserializeUser((data, done) => {
     console.log('deserrializing user')
-    console.log('data', data)
 
     if (data.accountType === 'student') {
-      console.log('deserializing student')
       Student.findById(data.id, function (err, user) {
         done(err, user)
       })
     } else if (data.accountType === 'teacher') {
-      console.log('deserializing teacher')
       Teacher.findById(data.id, function (err, user) {
         done(err, user)
       })
     } else if (data.accountType === 'parent') {
-      console.log('deserializing parent')
       Parent.findById(data.id, function (err, user) {
         done(err, user)
       })

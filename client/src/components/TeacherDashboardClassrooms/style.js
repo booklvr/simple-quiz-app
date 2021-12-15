@@ -27,6 +27,8 @@ export const ClassroomsHeading = styled.h3`
 
 export const AddClassroomButton = styled.button`
   color: black;
+  padding: 0.5rem;
+  font-size: 2rem;
 `
 
 export const ClassroomContentContainer = styled.div`

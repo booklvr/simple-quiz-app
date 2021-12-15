@@ -30,6 +30,7 @@ import {
   getClassroomReducer,
   verifyInviteCodeReducer,
 } from './reducers/classroomReducer'
+import { teacherReducer } from './reducers/teacherReducer'
 // ----------------------------------------------------------
 
 // combine reducers
@@ -47,6 +48,7 @@ const reducer = combineReducers({
   getAllCurrentTeacherClassrooms: getAllCurrentTeacherClassroomsReducer,
   verifyInviteCode: verifyInviteCodeReducer,
   getClassroom: getClassroomReducer,
+  teacher: teacherReducer,
 })
 // ----------------------------------------------------------
 

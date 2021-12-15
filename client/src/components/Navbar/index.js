@@ -15,14 +15,12 @@ const Navbar = () => {
   // remove later
   const dropAllModels = async () => {
     console.log('dropping all models')
-    // dispatch(logout())
     await axios.get('/api/v1/users/deleteAllModels')
   }
 
   const getCurrentUser = async () => {
-    console.log('checking current user')
     const { data } = await axios.get('/api/v1/users/getCurrentUser')
-    console.log(data)
+    console.log('checked user data:', data)
   }
 
   const handleLogout = () => {

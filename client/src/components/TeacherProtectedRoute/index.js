@@ -17,8 +17,7 @@ const TeacherProtectedRoute = ({
     dispatch(verifyLoggedInUser())
   }, [dispatch])
 
-  console.log('USER!!!!', user)
-  console.log('loading', loading)
+
 
   return (
     <Route

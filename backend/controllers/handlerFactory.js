@@ -2,6 +2,7 @@ import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import APIFeatures from '../utils/apiFeatures.js'
 import passport from 'passport'
+import ClassroomModel from '../models/ClassroomModel.js'
 
 export const registerFactory = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -18,12 +19,25 @@ export const registerFactory = (Model) =>
     }
 
     if (accountType === 'student') {
+      // getClasssroomId from inviteCode
+
+      if (req.body.inviteCode) {
+        const classroom = await ClassroomModel.findOne({
+          inviteCode: req.body.inviteCode,
+        })
+        Object.assign(
+          newUserData,
+          { dateOfBirth: 'nov 20 1988' },
+          { classroom: classroom._id },
+          { teacher: classroom.teacher }
+        )
+
+        if (!classroom) {
+          console.log('error: classroom not found')
+        }
+      }
+
       // Object.assign(newUserData, { ...rest })
-      Object.assign(
-        newUserData,
-        { dateOfBirth: 'nov 20 1988' },
-        { classroomID: 1234568 }
-      )
     }
 
     const user = await new Model(newUserData)
@@ -58,7 +72,7 @@ export const registerFactory = (Model) =>
         console.log('trying to authenticate user through email')
         res.status(200).json({
           status: 'success',
-          message: `${accountType} registered successfully`,
+          message: `${req.user.displayName} registered successfully`,
           user: req.user,
         })
       })
@@ -69,7 +83,7 @@ export const getAllFactory = (Model) =>
   catchAsync(async (req, res, next) => {
     let filter = {
       // only return classrooms and students of user
-      owner: req.user._id,
+      teacher: req.user._id,
     }
 
     // if (req.params.classroom) filter = { classroom: req.params.classroom };
@@ -79,14 +93,15 @@ export const getAllFactory = (Model) =>
       .sort()
       .limitFields()
       .paginate()
+
     const doc = await features.query
+
+    // const results = doc.length
 
     res.status(200).json({
       status: 'success',
       results: doc.length,
-      data: {
-        data: doc,
-      },
+      data: doc,
     })
   })
 

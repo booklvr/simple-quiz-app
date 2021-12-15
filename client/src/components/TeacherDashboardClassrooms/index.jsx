@@ -44,9 +44,6 @@ const TeacherDashboardClassrooms = () => {
   //   },
   // }
 
-  console.log('results', results)
-  console.log('classrooms', classrooms)
-
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const openModal = () => {
@@ -88,7 +85,9 @@ const TeacherDashboardClassrooms = () => {
                   >
                     name: {classroom.className}
                   </ClassroomListItemLink>
-                  <ClassroomListItemLink>
+                  <ClassroomListItemLink
+                    to={`/teacher/classroom/${classroom.slug}`}
+                  >
                     students: {classroom.students.length}
                   </ClassroomListItemLink>
                 </ClassroomListItem>

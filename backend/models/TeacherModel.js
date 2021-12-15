@@ -30,10 +30,7 @@ const TeacherSchema = new mongoose.Schema(
       lowercase: true,
       validate: [validator.isEmail, 'Please provide an email'],
     },
-    newUser: {
-      type: Boolean,
-      default: true,
-    },
+
     salt: {
       type: String,
       select: false,
@@ -70,18 +67,21 @@ TeacherSchema.methods.createPasswordResetToken = function () {
   return resetToken
 }
 
-
 TeacherSchema.virtual('classrooms', {
   ref: 'Classroom',
   localField: '_id',
-  foreignField: 'owner',
+  foreignField: 'teacher',
+})
+
+TeacherSchema.virtual('students', {
+  ref: 'Student', // reference Classroom Model,
+  localField: '_id', // local property that is same as foreign field (user _id);
+  foreignField: 'teacher', // name of thing on Classroom model that creates relationship (user.id);
 })
 
 TeacherSchema.post('findOneAndDelete', async function (user) {
-
   if (user) {
-    const classrooms = await Classroom.find({ owner: user._id })
-
+    const classrooms = await Classroom.find({ teacher: user._id })
 
     await Promise.all(
       classrooms.map(async (classroom) => {

@@ -26,8 +26,6 @@ const Register = ({ match }) => {
   const dispatch = useDispatch()
   const { accountType } = useSelector((state) => state.newUser)
 
-  console.log('accountType', accountType)
-
   const [registerWithEmail, setRegisterWithEmail] = useState(false)
 
   const updateAccountType = (type) => {

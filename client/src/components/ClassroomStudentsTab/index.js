@@ -21,7 +21,7 @@ const ClassroomStudentsTab = () => {
   const {
     loading,
     error,
-    classroom: { className, owner, slug, inviteCode, students },
+    classroom: { className, teacher, slug, inviteCode, students },
   } = useSelector((state) => state.getClassroom)
 
   const [isCopyMessage, setIsCopyMessage] = useState(false)

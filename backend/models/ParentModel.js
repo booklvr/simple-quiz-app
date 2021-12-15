@@ -28,10 +28,6 @@ const ParentSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
-  newUser: {
-    type: Boolean,
-    default: true,
-  },
 })
 
 ParentSchema.plugin(passportLocalMongoose, { usernameField: 'email' })

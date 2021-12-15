@@ -63,11 +63,9 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
   })
 
   const onSubmit = (data) => {
-    console.log(data)
 
     const { givenName, familyName, email, password, dateOfBirth } = data
 
-    console.log('on submit data:', data)
 
     if (accountType === 'student') {
       dispatch(
@@ -95,23 +93,9 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
     history.push(`/${accountType}`)
   }
 
-  // console.log(watch())
-
-  // const onError = (err) => {
-  //   console.log('onError -> err:', err)
-  // }
-  // console.log('formErrors', formErrors)
-  // console.log('isValid', isValid)
-
-  // // after successful form submission, reset the form
-  // useEffect(() => {
-  //   if (formState.isSubmitSuccessful) {
-  //     reset()
-  //   }
-  // }, [formState, reset])
+  
   const checkForExistingEmail = async () => {
     const email = getValues('email')
-    // console.log('email', email)
 
     const config = {
       headers: {
@@ -126,7 +110,6 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
     try {
       const { data } = await axios.post(URL, dataPacket, config)
 
-      console.log('api return data', data)
 
       if (data.exists) {
         setError('apiErrors', { type: 'API', message: 'email already taken' })
@@ -140,7 +123,6 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
         type: 'SERVER',
         message: error.response.data.message,
       })
-      console.log('error', error.response.data)
     }
   }
 
@@ -307,72 +289,3 @@ const EmailRegisterForm = ({ setRegisterWithEmail, accountType }) => {
 
 export default EmailRegisterForm
 
-// const checkForExistingEmail = async (email) => {
-//   console.log('check for existing email')
-//   console.log('email', email)
-//   console.log('formErrors', formErrors)
-//   const config = {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   }
-
-//   const dataPacket = {
-//     email,
-//   }
-
-//   const URL = `/api/v1/users/checkForExistingUser`
-
-//   const { data } = await axios.post(URL, dataPacket, config)
-
-//   console.log('data', data)
-//   return false
-// }
-
-// TO DO !!!!
-// use the error and the loading in the page somehow
-// const {
-//   userExists,
-//   loading: loadingCheckForEmail,
-//   errorCheckForEmail,
-// } = useSelector((state) => state.checkForExistingEmail)
-
-// console.log('userInfo', userInfo)
-// console.log('loading', loading)
-// console.log('error', error)
-
-// const [givenName, setGivenName] = useState('')
-// const [familyName, setFamilyName] = useState('')
-// const [email, setEmail] = useState('')
-// const [password, setPassword] = useState('')
-// const [classroomCode, setClassroomCode] = useState('')
-// const [dateOfBirth, setDateOfBirth] = useState('')
-
-// const onSubmit = (data) => {
-// e.preventDefault()
-// console.log(data)
-// if (accountType === 'student') {
-//   dispatch(
-//     registerWithEmail({
-//       givenName,
-//       familyName,
-//       email,
-//       password,
-//       accountType,
-//       classroomCode,
-//       dateOfBirth,
-//     })
-//   )
-// } else {
-//   dispatch(
-//     registerWithEmail({
-//       givenName,
-//       familyName,
-//       email,
-//       password,
-//       accountType,
-//     })
-//   )
-// }
-// history.push(`/${accountType}`)
-// }

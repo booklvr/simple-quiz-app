@@ -31,7 +31,7 @@ const AddClassroomForm = ({ closeModal }) => {
     clearErrors,
     getValues,
     formState,
-    formState: { errors: formErrors, isDirty },
+    formState: { errors: formErrors, isSubmitSuccessful },
   } = useForm({
     defaultValues: {
       className: '',
@@ -45,27 +45,17 @@ const AddClassroomForm = ({ closeModal }) => {
     (state) => state.addClassroom
   )
 
-  const [tempSubmitValue, setTempSubmitValue] = useState(``)
+  // const [tempSubmitValue, setTempSubmitValue] = useState(``)
 
   const onSubmit = (data) => {
-    setTempSubmitValue(getValues('className'))
-    console.log(data)
-    dispatch(addClassroom({ className: data.className, owner: _id }))
+    dispatch(addClassroom({ className: data.className, teacher: _id }))
 
-    console.log('isDirtySubmit', isDirty)
-
-    if (classroom) {
+    if (isSubmitSuccessful) {
       closeModal()
     }
   }
 
-  // console.log('watch', watch())
-
-  // useEffect(() => {
-  //   if (loading && error) {
-  //     resetField('className')
-  //   }
-  // }, [loading, error])
+  
 
   return (
     <AddClassroomFormContainer>

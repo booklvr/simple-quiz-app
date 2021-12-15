@@ -29,7 +29,6 @@ export const TeacherDashboardNavigation = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  height: 5rem;
   width: 100vw;
   background-color: grey;
   padding-left: 2rem;
@@ -40,6 +39,8 @@ export const TeacherDashboardNavigationButton = styled.button`
   align-items: center;
   justify-content: center;
   height: 100%;
+  height: 3rem;
+  font-size: 2rem;
   padding: 0 2rem;
 `
 

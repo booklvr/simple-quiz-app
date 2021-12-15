@@ -15,13 +15,12 @@ import {
 } from '../constants/classroomConstants'
 
 export const addClassroom =
-  ({ className, owner }) =>
+  ({ className, teacher }) =>
   async (dispatch) => {
-    console.log('addClassroom action')
 
     const dataPacket = {
       className,
-      owner,
+      teacher,
     }
 
     // add date of birth and classroom code if student
@@ -31,7 +30,6 @@ export const addClassroom =
         type: ADD_CLASSROOM_REQUEST,
       })
 
-      // console.log(accountType, givenName, familyName, email, password)
 
       const config = {
         headers: {
@@ -43,7 +41,6 @@ export const addClassroom =
 
       const { data } = await axios.post(URL, dataPacket, config)
 
-      console.log('data', data)
 
       const { data: classroom } = data
 
@@ -57,7 +54,6 @@ export const addClassroom =
           ? error.response.data.message
           : error.message
 
-      console.log('return error', returnError)
       dispatch({
         type: ADD_CLASSROOM_FAILURE,
         payload: returnError,
@@ -79,19 +75,8 @@ export const getCurrentTeachersClassrooms = () => async (dispatch) => {
       data: { data: classrooms, status, results },
     } = await axios.get(URL)
 
-    console.log('clsasrooms', classrooms)
-    console.log('status', status)
-    console.log('results', results)
-
-    // const {
-    //   data: { data: classrooms },
-    //   results,
-    //   status,
-    // } = await axios.get(URL)
-
-    // console.log('classrooms', classrooms)
-    // console.log('status', status)
-    // console.log('results', results)
+ 
+   
 
     dispatch({
       type: GET_ALL_CURRENT_TEACHERS_CLASSROOMS_SUCCESS,
@@ -104,9 +89,7 @@ export const getCurrentTeachersClassrooms = () => async (dispatch) => {
     const returnError =
       error.response && error.response.data.message
         ? error.response.data.message
-        : error.message
-
-    console.log('return error', returnError)
+        : error.message('return error', returnError)
     dispatch({
       type: GET_ALL_CURRENT_TEACHERS_CLASSROOMS_FAILURE,
       payload: returnError,
@@ -128,20 +111,6 @@ export const getClassroomDetails = (classroomSlug) => async (dispatch) => {
       data: { classroom, status, message },
     } = await axios.get(URL)
 
-    console.log('clsasroom', classroom)
-    console.log('status', status)
-    console.log('message', message)
-
-    // const {
-    //   data: { data: classrooms },
-    //   results,
-    //   status,
-    // } = await axios.get(URL)
-
-    // console.log('classrooms', classrooms)
-    // console.log('status', status)
-    // console.log('results', results)
-
     dispatch({
       type: GET_CLASSROOM_SUCCESS,
       payload: {
@@ -154,7 +123,6 @@ export const getClassroomDetails = (classroomSlug) => async (dispatch) => {
         ? error.response.data.message
         : error.message
 
-    console.log('return error', returnError)
     dispatch({
       type: GET_CLASSROOM_FAILURE,
       payload: returnError,
@@ -184,17 +152,6 @@ export const verifyCheckInviteCode = (inviteCode) => async (dispatch) => {
 
     const { data } = await axios.post(URL, dataPacket, config)
 
-    console.log('data', data)
-    // const {
-    //   data: { data: classrooms },
-    //   results,
-    //   status,
-    // } = await axios.get(URL)
-
-    // console.log('classrooms', classrooms)
-    // console.log('status', status)
-    // console.log('results', results)
-
     dispatch({
       type: VERIFY_INVITE_CODE_SUCCESS,
     })
@@ -204,7 +161,6 @@ export const verifyCheckInviteCode = (inviteCode) => async (dispatch) => {
         ? error.response.data.message
         : error.message
 
-    console.log('return error', returnError)
     dispatch({
       type: VERIFY_INVITE_CODE_FAILURE,
       payload: returnError,

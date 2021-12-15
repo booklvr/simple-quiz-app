@@ -31,32 +31,7 @@ export const login = (req, res, next) => {
 
 export const checkForExistingAccount = catchAsync(async (req, res, next) => {
   console.log('probably dont need middleware here')
-  // try {
-  //   // search for teacher
-  //   let teacher = await Teacher.findOne({ googleId: profile.id })
-  //   let student = await Student.findOne({ googleId: profile.id })
-  //   let parent = await Parent.findOne({ googleId: profile.id })
-
-  //   console.log('teacher', teacher)
-  //   console.log('student', student)
-  //   console.log('parent', parent)
-
-  //   if (teacher) {
-  //     res.locals.accountType = 'teacher'
-  //   } else if (student) {
-  //     res.locals.accountType = 'student'
-  //   } else if (parent) {
-  //     res.locals.accountType = 'parent'
-  //   } else {
-  //     return res.status(404).json({
-  //       status: 'failure',
-  //       message: 'this account is not registered, please register account',
-  //       data: null,
-  //     })
-  //   }
-  // } catch (err) {
-  //   console.log(err)
-  // }
+  
   next()
 })
 

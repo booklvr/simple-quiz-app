@@ -22,8 +22,13 @@ const StudentSchema = new mongoose.Schema(
     //   type: mongoose.Schema.ObjectId,
     //   ref: 'Classroom',
     // },
-    classroomID: {
-      type: Number,
+    classroom: {
+      type: mongoose.Schema.ObjectId, // from user schema logged in user
+      ref: 'Classroom', // connect to userModel
+    },
+    teacher: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Teacher'
     },
     googleId: {
       type: String,
@@ -39,10 +44,10 @@ const StudentSchema = new mongoose.Schema(
       lowercase: true,
       validate: [validator.isEmail, 'Please provide an email'],
     },
-    newUser: {
-      type: Boolean,
-      default: true,
-    },
+    // newUser: {
+    //   type: Boolean,
+    //   default: true,
+    // },
     gender: {
       type: String,
       // required: [true, 'must list a student gender'], // remove later?

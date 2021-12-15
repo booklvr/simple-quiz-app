@@ -19,10 +19,8 @@ const Classroom = () => {
 
   const [classroomTab, setClassroomTab] = useState('students')
 
-  console.log('classroom', classroom)
 
   const { slug } = useParams()
-  console.log('slug', slug)
 
   useEffect(() => {
     dispatch(getClassroomDetails(slug))
