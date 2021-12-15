@@ -1,4 +1,3 @@
-export const SET_ACCOUNT_TYPE = 'SET_ACCOUNT_TYPE'
 
 // register with email
 export const REGISTER_WITH_EMAIL_REQUEST = 'REGISTER_WITH_EMAIL_REQUEST'

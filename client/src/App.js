@@ -23,7 +23,6 @@ function App() {
         <Route exact path='/' component={Home} />
         <Route exact path='/register' component={Register} />
         <Route exact path='/login' component={Login} />
-        <Route exact path='/choose-account' component={ChooseAccountType} />
         <Route exact path='/teacher' component={TeacherHome} />
         <Route exact path='/teacher/classroom/:slug' component={Classroom} />
         <Route exact path='/student' component={StudentHome} />

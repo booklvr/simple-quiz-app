@@ -18,19 +18,16 @@ import {
 } from './styled'
 import googleIcon from '../../assets/icons/google-icon-light.svg'
 import { LoginLink } from '../Home/styled'
-import { setAccountType } from '../../actions/newUserActions'
 import { FaEnvelope } from 'react-icons/fa'
 import EmailRegisterForm from '../../components/EmailRegisterForm'
 
 const Register = ({ match }) => {
   const dispatch = useDispatch()
-  const { accountType } = useSelector((state) => state.newUser)
+  // const { accountType } = useSelector((state) => state.newUser)
+
+  const [accountType, setAccountType] = useState('teacher')
 
   const [registerWithEmail, setRegisterWithEmail] = useState(false)
-
-  const updateAccountType = (type) => {
-    dispatch(setAccountType(type))
-  }
 
   useEffect(() => {
     if (accountType === '') {
@@ -48,19 +45,19 @@ const Register = ({ match }) => {
           <AccountTypesMessage>Register as a </AccountTypesMessage>
           <AccountTypeButtonContainer>
             <AccountTypeButton
-              onClick={() => updateAccountType('teacher')}
+              onClick={() => setAccountType('teacher')}
               current={'teacher' === accountType}
             >
               Teacher
             </AccountTypeButton>
             <AccountTypeButton
-              onClick={() => updateAccountType('student')}
+              onClick={() => setAccountType('student')}
               current={'student' === accountType}
             >
               Student
             </AccountTypeButton>
             <AccountTypeButton
-              onClick={() => updateAccountType('parent')}
+              onClick={() => setAccountType('parent')}
               current={'parent' === accountType}
             >
               Parent

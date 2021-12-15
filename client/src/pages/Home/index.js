@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <HomeContainer>
       Welcome to nicks teaching website
-      <LoginLink to='/choose-account'>Start</LoginLink>
+      <LoginLink to='/register'>Register</LoginLink>
     </HomeContainer>
   )
 }

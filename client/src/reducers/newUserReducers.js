@@ -5,7 +5,6 @@ import {
   REGISTER_WITH_EMAIL_FAILURE,
   REGISTER_WITH_EMAIL_REQUEST,
   REGISTER_WITH_EMAIL_SUCCESS,
-  SET_ACCOUNT_TYPE,
 } from '../constants/newUserConstants'
 import {
   VERIFY_LOGGED_IN_USER_FAIL,
@@ -31,17 +30,7 @@ export const verifyLoggedInUserReducer = (
   }
 }
 
-export const newUserReducer = (state = { accountType: '' }, action) => {
-  const { type, payload } = action
 
-  switch (type) {
-    case SET_ACCOUNT_TYPE:
-      return { ...state, accountType: payload }
-
-    default:
-      return state
-  }
-}
 
 export const registerWithEmailReducer = (
   state = { loading: false, user: {}, error: null },

@@ -6,13 +6,10 @@ import {
   REGISTER_WITH_EMAIL_FAILURE,
   REGISTER_WITH_EMAIL_REQUEST,
   REGISTER_WITH_EMAIL_SUCCESS,
-  SET_ACCOUNT_TYPE,
 } from '../constants/newUserConstants'
 import { addMessage } from './utils'
 
-export const setAccountType = (type) => (dispatch) => {
-  dispatch({ type: SET_ACCOUNT_TYPE, payload: type })
-}
+
 
 export const registerWithEmail =
   ({ accountType, givenName, familyName, email, password, ...rest }) =>

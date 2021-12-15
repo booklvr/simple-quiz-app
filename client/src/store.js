@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 // newUserReducers
 import {
-  newUserReducer,
+  // newUserReducer,
   registerWithEmailReducer,
   checkForExistingUserReducer,
 } from './reducers/newUserReducers'
@@ -30,13 +30,13 @@ import {
   getClassroomReducer,
   verifyInviteCodeReducer,
 } from './reducers/classroomReducer'
-import { teacherReducer } from './reducers/teacherReducer'
+// import { teacherReducer } from './reducers/teacherReducer'
 // ----------------------------------------------------------
 
 // combine reducers
 const reducer = combineReducers({
   //reducers
-  newUser: newUserReducer,
+  // newUser: newUserReducer,
   checkForExistingUser: checkForExistingUserReducer,
   registerWithEmail: registerWithEmailReducer,
   user: userReducer,
@@ -48,7 +48,7 @@ const reducer = combineReducers({
   getAllCurrentTeacherClassrooms: getAllCurrentTeacherClassroomsReducer,
   verifyInviteCode: verifyInviteCodeReducer,
   getClassroom: getClassroomReducer,
-  teacher: teacherReducer,
+  // teacher: teacherReducer,
 })
 // ----------------------------------------------------------
 
